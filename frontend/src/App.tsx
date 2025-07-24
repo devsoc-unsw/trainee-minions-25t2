@@ -1,11 +1,14 @@
+import Navbar from "./components/Navbar";
+
 function App() {
   return (
     <>
-      <div className='text-3xl font-bold underline bg-red-500'>
-        hello
+      <Navbar/>
+      <div className="bg-background-primary flex h-[2000px] justify-center overflow-hidden">
+        [content goes here]
       </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
