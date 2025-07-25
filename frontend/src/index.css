@@ -3,12 +3,17 @@
 @theme {
   /* Primary Colours */
   --color-background-primary: #f8f9fa;
+  --color-background-secondary: #ef4444;
 
   /* Button System */
   --color-button-background: #ffffff;
+  --color-secondary-button-background: #ef4444;
+
   --color-button-background-hover: #f1f3f4;
+
   --color-button-border: #dadce0;
   --color-button-border-hover: #bdc1c6;
+
   --color-button-text: #3c4043;
   --color-button-text-hover: #ef4444;
 }
