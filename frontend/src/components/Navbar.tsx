@@ -1,22 +1,30 @@
 import { useState, useEffect } from "react";
 import {
   KeyRound,
-  ScanFace,
   Heart,
   Search,
   CalendarPlus,
   CalendarSearch,
   MapPin,
   Tags,
+  ChevronDown,
+  ChevronUp,
+  User,
+  Building2,
 } from "lucide-react";
 import Hamburger from "./Hamburger";
 
 const Navbar = () => {
   const [isClicked, setIsClicked] = useState(false);
   const [isFocused, setIsFocused] = useState<string | null>(null);
+  const [loginIsClicked, setLoginIsClicked] = useState(false);
 
   const toggleHeart = () => {
     setIsClicked(!isClicked);
+  };
+
+  const toggleLoginDrop = () => {
+    setLoginIsClicked(!loginIsClicked);
   };
 
   const [isScrolled, setIsScrolled] = useState(false);
@@ -29,6 +37,8 @@ const Navbar = () => {
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
+
+  // Close dropdown when clicking outside
 
   return (
     <nav
@@ -135,14 +145,36 @@ const Navbar = () => {
             <CalendarPlus size={16} />
             Create Events
           </button>
-          <button className="hover:text-button-text-hover hover:bg-button-background-hover flex cursor-pointer items-center gap-2 rounded-3xl px-3 py-2 transition-colors">
-            <ScanFace size={16} />
-            Signup
-          </button>
-          <button className="hover:text-button-text-hover hover:bg-button-background-hover flex cursor-pointer items-center gap-2 rounded-3xl px-3 py-2 transition-colors">
-            <KeyRound size={16} />
-            Login
-          </button>
+
+          {/* Login Dropdown */}
+          <div className="relative">
+            <button
+              className="hover:text-button-text-hover hover:bg-button-background-hover flex cursor-pointer items-center gap-2 rounded-3xl px-3 py-2 transition-colors"
+              onClick={toggleLoginDrop}
+            >
+              <KeyRound size={16} />
+              Login
+              {!loginIsClicked ? (
+                <ChevronDown size={16} className="pt-[3px] pl-[2px]" />
+              ) : (
+                <ChevronUp size={16} className="pt-[3px] pl-[2px]" />
+              )}
+            </button>
+
+            {/* Dropdown Menu */}
+            {loginIsClicked && (
+              <div className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-neutral-200 bg-white py-2 shadow-lg">
+                <button className="hover:bg-button-background-hover flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-button-text transition-colors">
+                  <User size={16} className="text-neutral-400" />
+                  Users
+                </button>
+                <button className="hover:bg-button-background-hover flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-button-text transition-colors">
+                  <Building2 size={16} className="text-neutral-400" />
+                  Hosts
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </div>
 
