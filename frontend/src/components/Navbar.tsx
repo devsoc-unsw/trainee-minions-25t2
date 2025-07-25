@@ -170,7 +170,7 @@ const Navbar = () => {
                 </button>
                 <button className="hover:bg-button-background-hover flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-button-text transition-colors">
                   <Building2 size={16} className="text-neutral-400" />
-                  Organisers
+                  Hosts
                 </button>
               </div>
             )}
