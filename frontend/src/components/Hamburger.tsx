@@ -60,8 +60,6 @@ const Hamburger = () => {
           </div>
         </div>
       </div>
-    <div className="cursor-pointer" onClick={toggleHamburger}>
-      {!isOpen ? <Menu /> : <X />}
     </div>
   );
 };
