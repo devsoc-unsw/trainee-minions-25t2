@@ -2,25 +2,17 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 
 const Hamburger = () => {
-    const [isOpen, setIsOpen] = useState(false);
-    
-    const toggleHamburger = () => {
-        setIsOpen(!isOpen);
-    }
+  const [isOpen, setIsOpen] = useState(false);
 
-    return (
-        <div className="cursor-pointer"
-             onClick={toggleHamburger}>
-            { !isOpen ? (
-                <Menu/>
-            ) : (
-                <X/>
-            )
+  const toggleHamburger = () => {
+    setIsOpen(!isOpen);
+  };
 
-            }
-            
-        </div>
-    );
+  return (
+    <div className="cursor-pointer" onClick={toggleHamburger}>
+      {!isOpen ? <Menu /> : <X />}
+    </div>
+  );
 };
 
-export default Hamburger
+export default Hamburger;
