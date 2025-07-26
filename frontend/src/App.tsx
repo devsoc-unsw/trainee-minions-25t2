@@ -2,7 +2,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import LoginPage from "./Pages/login-page";
 import Background from "./components/Background";
-
+import EventsGrid from "./components/EventsGrid";
 
 // Create a Layout component for the main content
 const Layout = () => {
@@ -10,9 +10,7 @@ const Layout = () => {
     <>
       <Background />
       <Navbar />
-      <div className="bg-background-primary flex h-[2000px] justify-center overflow-hidden">
-        [content goes here]
-      </div>
+      <EventsGrid />
     </>
   );
 };
