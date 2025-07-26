@@ -1,7 +1,6 @@
 import type { Event } from "../data/EventsData";
 import { popularEvents, weekendEvents } from "../data/EventsData";
 
-
 const EventsGrid = () => {
   interface EventCardProps {
     event: Event;
@@ -9,7 +8,6 @@ const EventsGrid = () => {
 
   // Seperate function for creating each individual event card
   const EventCard = ({ event }: EventCardProps) => {
-
     // Adds status tag
     const GetStatus = (status: string) => {
       if (status === "Nearly full") {
@@ -22,7 +20,7 @@ const EventsGrid = () => {
     };
 
     return (
-      <div className="w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm hover:bg-button-background-hover hover:scale-102 duration-400">
+      <div className="hover:bg-button-background-hover w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm duration-400 hover:scale-102">
         <div className="relative">
           <img
             src={event.image}
@@ -43,9 +41,15 @@ const EventsGrid = () => {
           <h3 className="mb-2 line-clamp-2 text-sm font-semibold text-gray-900">
             {event.title}
           </h3>
-          <p className="mb-1 text-sm text-gray-600 line-clamp-1">{event.date}</p>
-          <p className="mb-2 text-sm text-gray-600 line-clamp-1">{event.venue}</p>
-          <p className="text-sm font-medium text-gray-900 line-clamp-1">{event.price}</p>
+          <p className="mb-1 line-clamp-1 text-sm text-gray-600">
+            {event.date}
+          </p>
+          <p className="mb-2 line-clamp-1 text-sm text-gray-600">
+            {event.venue}
+          </p>
+          <p className="line-clamp-1 text-sm font-medium text-gray-900">
+            {event.price}
+          </p>
         </div>
       </div>
     );
@@ -64,7 +68,7 @@ const EventsGrid = () => {
         <h2 className="mb-6 text-2xl font-bold text-gray-900">{title}</h2>
 
         {/* Independant scaling */}
-        <div className="flex gap-4 overflow-x-auto pb-2 items-start">
+        <div className="flex items-start gap-4 overflow-x-auto pb-2">
           {events.map((event) => (
             // Note, key prop is not passed, by it used by react for more efficient rendering i think?
             <EventCard key={event.id} event={event} />
@@ -75,7 +79,7 @@ const EventsGrid = () => {
   };
 
   return (
-    <div className="mx-auto min-h-screen max-w-7xl bg-background-primary px-6 py-8">
+    <div className="bg-background-primary mx-auto min-h-screen max-w-7xl px-6 py-8">
       <EventShowcase title="Popular events" events={popularEvents} />
       <EventShowcase title="This weekend" events={weekendEvents} />
     </div>
