@@ -164,11 +164,11 @@ const Navbar = () => {
             {/* Dropdown Menu */}
             {loginIsClicked && (
               <div className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-neutral-200 bg-white py-2 shadow-lg">
-                <button className="hover:bg-button-background-hover flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-button-text transition-colors">
+                <button className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors">
                   <User size={16} className="text-neutral-400" />
                   Users
                 </button>
-                <button className="hover:bg-button-background-hover flex w-full items-center gap-3 px-4 py-2 text-left text-sm text-button-text transition-colors">
+                <button className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors">
                   <Building2 size={16} className="text-neutral-400" />
                   Hosts
                 </button>

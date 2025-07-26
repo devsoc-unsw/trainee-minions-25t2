@@ -42,7 +42,7 @@ const Hamburger = () => {
             />
           </div>
 
-          <div className="flex justify-center gap-2">  
+          <div className="flex justify-center gap-2">
             <button className="bg-secondary-button-background hover:text-button-text-hover hover:bg-button-background-hover flex cursor-pointer items-center gap-2 rounded-3xl px-3 py-2 text-white transition-colors">
               <KeyRound size={16} />
               User login
