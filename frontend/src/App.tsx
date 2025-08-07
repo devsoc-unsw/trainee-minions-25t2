@@ -3,6 +3,7 @@ import Navbar from "./components/Navbar";
 import LoginPage from "./Pages/login-page";
 import Background from "./components/Background";
 import EventsGrid from "./components/EventsGrid";
+import HeroComponent from './components/HeroComponent';
 
 // Create a Layout component for the main content
 const Layout = () => {
@@ -10,6 +11,7 @@ const Layout = () => {
     <>
       <Background />
       <Navbar />
+      <HeroComponent />
       <EventsGrid />
     </>
   );
