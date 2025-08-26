@@ -1,6 +1,6 @@
 import type { Event } from "../data/EventsData";
 import { popularEvents, weekendEvents } from "../data/EventsData";
-import { memo } from "react";
+import { memo, useState } from "react";
 
 // Adds status tag
 const GetStatus = (status: string) => {
@@ -20,8 +20,14 @@ interface EventCardProps {
 
 // Seperate function for creating each individual event card
 const EventCard = memo(({ event }: EventCardProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="hover:bg-button-background-hover w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102 transform-gpu">
+    <>
+    <div 
+      className="hover:bg-button-background-hover w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102 transform-gpu"
+      onClick={() => setIsModalOpen(true)}
+    >
       <div className="relative">
         <img
           src={event.image}
@@ -53,6 +59,58 @@ const EventCard = memo(({ event }: EventCardProps) => {
         </p>
       </div>
     </div>
+
+    {isModalOpen && (
+      <>
+        <div 
+          className="fixed inset-0 backdrop-blur z-40"
+        ></div>
+
+        <div 
+          className="fixed inset-0 flex items-center justify-center z-50"
+          onClick={() => setIsModalOpen(false)} // Click outside closes modal
+        >
+          <div 
+            className="bg-white rounded-xl shadow-2xl w-5/6 h-2/5 max-w-5xl flex overflow-hidden"
+            onClick={(e) => e.stopPropagation()} // Prevent closing when clicking inside
+          >
+            
+            <div className="w-3/5">
+              <img 
+                src={event.image} 
+                alt={event.title}
+                className="w-full h-full object-cover"
+              />
+            </div>
+            
+            <div className="w-1/2 p-8 flex flex-col justify-between">
+              <div>
+                <h2 className="text-3xl font-bold mb-4 text-gray-900">{event.title}</h2>
+                <p className="text-lg text-black mb-3">{event.date}</p>
+                <p className="text-lg text-black mb-3">Requirements: Phone, Rizz, Louis Lim</p>
+                <p className="text-lg text-black mb-3">{event.venue}</p>
+                <p className="text-xl font-semibold text-black mb-6">{event.price}</p>
+              </div>
+              
+              <div className="flex gap-5">
+                <button 
+                  onClick={() => setIsModalOpen(false)}
+                  className="px-6 py-3 bg-purple-400 font-bold text-white rounded-lg hover:bg-purple-500"
+                >
+                  Close
+                </button>
+                <button className="px-6 py-3 bg-teal-500 font-bold text-white rounded-lg hover:bg-teal-600">
+                  Extra Details & Info
+                </button>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+      </>
+    )}
+    </>
   );
 });
 
