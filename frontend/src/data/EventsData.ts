@@ -20,7 +20,7 @@ export const popularEvents: Event[] = [
   {
     id: 1,
     title: "LeOblock",
-    date: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
+    date: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.",
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Full",
