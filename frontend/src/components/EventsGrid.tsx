@@ -1,6 +1,7 @@
 import type { Event } from "../data/EventsData";
 import { popularEvents, weekendEvents } from "../data/EventsData";
-import { memo } from "react";
+import { memo, useState } from "react";
+import EventModal from "./EventModal";
 
 // Adds status tag
 const GetStatus = (status: string) => {
@@ -20,8 +21,14 @@ interface EventCardProps {
 
 // Seperate function for creating each individual event card
 const EventCard = memo(({ event }: EventCardProps) => {
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
   return (
-    <div className="hover:bg-button-background-hover w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102 transform-gpu">
+    <>
+    <div 
+      className="hover:bg-button-background-hover w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102 transform-gpu"
+      onClick={() => setIsModalOpen(true)}
+    >
       <div className="relative">
         <img
           src={event.image}
@@ -53,6 +60,13 @@ const EventCard = memo(({ event }: EventCardProps) => {
         </p>
       </div>
     </div>
+
+      <EventModal 
+          event={event}
+          isOpen={isModalOpen}
+          onClose={() => setIsModalOpen(false)}
+      />
+    </>
   );
 });
 

@@ -1,4 +1,10 @@
 import theking from "../assets/maxresdefault.svg";
+import bar1 from "../assets/rooftop_bar1.jpg";
+import bar2 from "../assets/rooftop_bar2.jpg";
+import bar3 from "../assets/rooftop_bar3.jpg";
+import bar4 from "../assets/rooftop_bar4.jpg";
+import res1 from "../assets/restaurant_1.jpg";
+import res2 from "../assets/restaurant_2.jpg";
 
 export interface Event {
   id: number;
@@ -14,11 +20,11 @@ export const popularEvents: Event[] = [
   {
     id: 1,
     title: "LeOblock",
-    date: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard",
+    date: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.",
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Full",
-    image: theking,
+    image: bar1,
   },
   {
     id: 2,
@@ -27,17 +33,17 @@ export const popularEvents: Event[] = [
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Nearly full",
-    image: theking,
+    image: bar2,
   },
   {
     id: 3,
     title:
-      "LeOblock | LeOblock | LeOblock | LeOblock | LeOblock | LeOblock | LeOblock | LeOblock | LeOblock",
+      "Louis Lim Estate",
     date: "Tuesday at 7:00 PM",
     venue: "Courtside Lakers",
     price: "From $1",
     status: "",
-    image: theking,
+    image: bar3,
   },
   {
     id: 4,
@@ -46,7 +52,7 @@ export const popularEvents: Event[] = [
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Popular",
-    image: theking,
+    image: bar4,
   },
   {
     id: 5,
@@ -55,7 +61,7 @@ export const popularEvents: Event[] = [
     venue: "Courtside Lakers",
     price: "From $1",
     status: "",
-    image: theking,
+    image: bar4,
   },
 ];
 
@@ -67,7 +73,7 @@ export const weekendEvents: Event[] = [
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Full",
-    image: theking,
+    image: res1,
   },
   {
     id: 2,
@@ -76,7 +82,7 @@ export const weekendEvents: Event[] = [
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Nearly full",
-    image: theking,
+    image: bar4,
   },
   {
     id: 3,
@@ -85,7 +91,7 @@ export const weekendEvents: Event[] = [
     venue: "Courtside Lakers",
     price: "From $1",
     status: "",
-    image: theking,
+    image: res2,
   },
   {
     id: 4,
@@ -94,7 +100,7 @@ export const weekendEvents: Event[] = [
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Popular",
-    image: theking,
+    image: bar3,
   },
   {
     id: 5,
