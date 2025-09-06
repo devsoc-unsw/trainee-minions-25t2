@@ -2,9 +2,12 @@ import backgroundSvg from "../assets/royal-botanic-gardens-sydney-australia 1.sv
 import { GoogleLogin } from "@react-oauth/google";
 import type { CredentialResponse } from "@react-oauth/google";
 import { useNavigate } from "react-router-dom";
+import { Heart } from "lucide-react";
+import { useState } from "react";
 
 export default function LoginPage() {
   const navigate = useNavigate();
+  const [isClicked, setIsClicked] = useState(false);
 
   const handleGoogleSuccess = (credentialResponse: CredentialResponse) => {
     console.log("Login Success:", credentialResponse);
@@ -19,6 +22,10 @@ export default function LoginPage() {
     e.preventDefault();
     console.log("Email login attempted");
   }
+  
+  const toggleHeart = () => {
+    setIsClicked(!isClicked);
+  };
 
   return (
     <div
@@ -26,10 +33,17 @@ export default function LoginPage() {
       style={{ backgroundImage: `url(${backgroundSvg})` }}
     >
       <div className="flex h-[500px] w-[400px] flex-col rounded-lg bg-white p-8 shadow-lg">
-        <div className="pb-6 text-center text-2xl font-bold">
-          LOGO GOES HERE
+        <div className="flex justify-end items-center gap-1 rounded-lg p-0 text-2xl font-bold text-red-500">
+          <button
+            className="rotate-20 cursor-pointer duration-300 hover:rotate-0 hover:animate-pulse"
+            onClick={toggleHeart}
+          >
+            {!isClicked ? <Heart /> : <Heart fill="red" />}
+          </button>
+          <span className="cursor-default">link</span>
         </div>
-        <div className="pb-2 text-3xl font-bold text-gray-800">WELCOME!</div>
+
+        <div className="pt-6 pb-2 text-3xl font-bold text-gray-800">WELCOME!</div>
         <div className="pb-10 text-3xl font-bold text-gray-800">
           WHAT'S YOUR EMAIL?
         </div>
