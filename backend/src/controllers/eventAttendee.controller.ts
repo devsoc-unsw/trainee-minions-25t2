@@ -18,30 +18,6 @@ async function viewSingleEventAttendee(req: Request, res: Response) {
     }
 }
 
-async function createEvent(req: Request, res: Response) {
-    try {
-
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-}
-
-async function deleteEvent(req: Request, res: Response) {
-    try {
-
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-}
-
-async function updateEvent(req: Request, res: Response) {
-    try {
-
-    } catch (err) {
-        res.status(400).json({ error: err.message });
-    }
-}
-
 async function signUpForEvent(req: Request, res: Response) {
     try {
 
@@ -61,9 +37,6 @@ async function unsignUpForEvent(req: Request, res: Response) {
 export {
     viewAllEventAttendee, 
     viewSingleEventAttendee, 
-    createEvent, 
-    deleteEvent, 
-    updateEvent, 
     signUpForEvent, 
     unsignUpForEvent
 };
