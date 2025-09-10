@@ -24,8 +24,8 @@ const EventCard = memo(({ event }: EventCardProps) => {
 
   return (
     <>
-      <div 
-        className="hover:bg-button-background-hover w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102 transform-gpu"
+      <div
+        className="hover:bg-button-background-hover w-85 flex-shrink-0 transform-gpu cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102"
         onClick={() => setIsModalOpen(true)}
       >
         <div className="relative">
@@ -61,7 +61,7 @@ const EventCard = memo(({ event }: EventCardProps) => {
       </div>
 
       {isModalOpen && ( // Only render modal when open
-        <EventModal 
+        <EventModal
           event={event}
           isOpen={isModalOpen}
           onClose={() => setIsModalOpen(false)}

@@ -3,7 +3,7 @@ import Navbar from "./components/Navbar";
 import LoginPage from "./Pages/login-page";
 import Background from "./components/Background";
 import EventsGrid from "./components/EventsGrid";
-import HeroComponent from './components/HeroComponent';
+import HeroComponent from "./components/HeroComponent";
 import UserDashboard from "./Pages/user-dashboard";
 
 // Create a Layout component for the main content

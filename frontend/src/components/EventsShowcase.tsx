@@ -25,4 +25,4 @@ const EventShowcase = memo(({ title, events }: EventShowcaseProps) => {
   );
 });
 
-export default EventShowcase
+export default EventShowcase;
