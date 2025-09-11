@@ -8,8 +8,8 @@ let db: Db;
 // Collections
 export let sessionsCollection: Collection;
 export let usersCollection: Collection;
-export let mailsCollection: Collection;
 export let dataCollection: Collection;
+export let eventsCollection: Collection;
 
 export async function connectToDatabase() {
   try {
@@ -27,6 +27,7 @@ export async function connectToDatabase() {
 
     sessionsCollection = db.collection("sessions");
     usersCollection = db.collection("users");
+    eventsCollection = db.collection('events');
 
     // Initialize collections if they don't exist
     const usersCount = await usersCollection.countDocuments();
@@ -42,6 +43,14 @@ export async function connectToDatabase() {
         sessions: [],
       });
     }
+
+    const eventsCount = await eventsCollection.countDocuments();
+    if (eventsCount === 0) {
+      await eventsCollection.insertOne({
+
+      });
+    }
+
   } catch (error) {
     console.error("Error found when connecting to MongoDB: ", error);
   }

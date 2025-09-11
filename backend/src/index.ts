@@ -4,6 +4,7 @@ import { PORT } from "../config.json";
 import { errorMiddleware } from "./middleware";
 import cors from "cors";
 import { connectToDatabase, closeDatabaseConnection } from "./db";
+import router from './routes/eventHost.controller';
 
 dotenv.config();
 
@@ -20,9 +21,12 @@ async function startServer() {
       console.log(`Server is running at http://localhost:${port}`);
     });
 
-    // Routes & middleware
+    // Routes
     app.use(express.json());
     app.use(cors());
+    app.use('/api/host/events', router);
+
+    // Middleware
     app.use(errorMiddleware);
   } catch (error) {
     console.error("Error starting the server:", error);

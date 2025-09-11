@@ -1,7 +1,10 @@
 import express, { NextFunction } from "express";
-import * as eventController from "../controllers/eventHost.controller"
+import { createEvent, viewAllEventsByHost } from "../controllers/eventHost.controller"
 import { sessionMiddleware } from "../middleware";
 
 const router = express.Router();
+
+router.get('/', viewAllEventsByHost);
+router.post('/', createEvent);
 
 export default router;
