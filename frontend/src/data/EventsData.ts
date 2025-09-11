@@ -19,8 +19,8 @@ export interface Event {
 export const popularEvents: Event[] = [
   {
     id: 1,
-    title: "LeOblock",
-    date: "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard.",
+    title: "Louis Estate",
+    date: "8:00PM AEST",
     venue: "Courtside Lakers",
     price: "From $1",
     status: "Full",
@@ -67,7 +67,7 @@ export const popularEvents: Event[] = [
 
 export const weekendEvents: Event[] = [
   {
-    id: 1,
+    id: 6,
     title: "LeSpeed Date | Courtside lakers",
     date: "Tuesday at 7:00 PM",
     venue: "Courtside Lakers",
@@ -76,7 +76,7 @@ export const weekendEvents: Event[] = [
     image: res1,
   },
   {
-    id: 2,
+    id: 7,
     title: "LeSpeed Date | Courtside lakers",
     date: "Tuesday at 7:00 PM",
     venue: "Courtside Lakers",
@@ -85,7 +85,7 @@ export const weekendEvents: Event[] = [
     image: bar4,
   },
   {
-    id: 3,
+    id: 8,
     title: "LeSpeed Date | Courtside lakers",
     date: "Tuesday at 7:00 PM",
     venue: "Courtside Lakers",
@@ -94,7 +94,7 @@ export const weekendEvents: Event[] = [
     image: res2,
   },
   {
-    id: 4,
+    id: 9,
     title: "LeSpeed Date | Courtside lakers",
     date: "Tuesday at 7:00 PM",
     venue: "Courtside Lakers",
@@ -103,7 +103,7 @@ export const weekendEvents: Event[] = [
     image: bar3,
   },
   {
-    id: 5,
+    id: 10,
     title: "LeSpeed Date | Courtside lakers",
     date: "Tuesday at 7:00 PM",
     venue: "Courtside Lakers",

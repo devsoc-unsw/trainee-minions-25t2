@@ -1,4 +1,5 @@
 import type { Event } from "../data/EventsData";
+import { useNavigate } from 'react-router-dom';
 
 interface EventModalProps {
     event: Event; 
@@ -7,6 +8,7 @@ interface EventModalProps {
 }
 
 const EventModal = ({ event, isOpen, onClose }: EventModalProps) => {
+    const navigate = useNavigate();
     if (!isOpen) {
         return null;
     }
@@ -48,7 +50,10 @@ const EventModal = ({ event, isOpen, onClose }: EventModalProps) => {
                                 >
                                     Close
                                 </button>
-                                <button className = "px-6 py-3 bg-teal-500 font-bold text-white rounded-lg hover:bg-teal-600">
+                                <button 
+                                    className = "px-6 py-3 bg-teal-500 font-bold text-white rounded-lg hover:bg-teal-600"
+                                    onClick={() => navigate(`/event/${event.id}`)}
+                                >
                                     Extra Details & Info
                                 </button>
                             </div>
