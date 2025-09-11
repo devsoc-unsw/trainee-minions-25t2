@@ -9,7 +9,8 @@ let db: Db;
 export let sessionsCollection: Collection;
 export let usersCollection: Collection;
 export let dataCollection: Collection;
-export let eventsCollection: Collection;
+export let eventsCollection: Collection; // TODO: only have one eventsCollection
+export let eventsDisplayCollection: Collection; // TODO: only have one eventsCollection
 
 export async function connectToDatabase() {
   try {
@@ -28,6 +29,7 @@ export async function connectToDatabase() {
     sessionsCollection = db.collection("sessions");
     usersCollection = db.collection("users");
     eventsCollection = db.collection('events');
+    eventsDisplayCollection = db.collection('events-display'); // current view of events
 
     // Initialize collections if they don't exist
     const usersCount = await usersCollection.countDocuments();
@@ -44,9 +46,9 @@ export async function connectToDatabase() {
       });
     }
 
-    const eventsCount = await eventsCollection.countDocuments();
+    const eventsCount = await eventsDisplayCollection.countDocuments();
     if (eventsCount === 0) {
-      await eventsCollection.insertOne({
+      await eventsDisplayCollection.insertOne({
 
       });
     }

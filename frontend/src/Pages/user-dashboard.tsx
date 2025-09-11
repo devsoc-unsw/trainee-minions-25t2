@@ -1,13 +1,15 @@
 import { User, Edit } from "lucide-react";
 import UserEventsGrid from "../components/UserEventsGrid";
+import Navbar from "../components/Navbar";
 
 export default function UserDashboard() {
   return (
     <div className="flex min-h-screen w-full flex-col bg-cover bg-center">
+      <Navbar />
       {/* Profile Header */}
       <div className="flex w-full justify-center">
         <div className="w-full max-w-4xl px-6">
-          <div className="mt-24 mb-8">
+          <div className="mt-10 mb-8">
             <div className="flex items-center justify-between rounded-lg bg-white p-6 shadow-lg">
               {/* Left side - Profile info */}
               <div className="flex items-center space-x-4">

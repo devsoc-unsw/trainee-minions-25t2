@@ -1,9 +1,12 @@
 import { useState } from "react";
 import FileDropZone from "../components/FileDropZone";
 import Navbar from "../components/Navbar";
+import { useNavigate } from 'react-router-dom';
 
 export default function HostCreateEvent() {
   const PORT = import.meta.env.VITE_BACKEND_PORT;
+
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState(
     {
@@ -76,7 +79,7 @@ export default function HostCreateEvent() {
           <div className="flex flex-col">
             <FileDropZone w="w-100" h="h-100" m="mt-10" />
             {/* submit button: */}
-            <button className="mt-10 w-60 h-16 text-2xl font-bold rounded-2xl bg-gray-300 hover:text-gray-800 hover:bg-red-300">Create Event</button>
+            <button onClick={() => { navigate('/user-dashboard') }} className="mt-10 w-60 h-16 text-2xl font-bold rounded-2xl bg-gray-300 hover:text-gray-800 hover:bg-red-300">Create Event</button>
           </div>
           <div className="ml-20 -mt-10 flex flex-col gap-y-6">
             <div>

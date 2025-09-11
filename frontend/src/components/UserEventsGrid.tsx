@@ -1,6 +1,6 @@
 import type { Event } from "../data/EventsData";
-import { popularEvents } from "../data/EventsData";
-import { memo, useState } from "react";
+// import { popularEvents } from "../data/EventsData";
+import { memo, useEffect, useState } from "react";
 import EventModal from "./EventModal";
 
 // Adds status tag
@@ -94,10 +94,34 @@ const EventShowcase = memo(({ title, events }: EventShowcaseProps) => {
 });
 
 const UserEventsGrid = () => {
+  const PORT = import.meta.env.VITE_BACKEND_PORT;
+  const [events, setEvents] = useState<Event[]>([]);
+
+  const viewAllEventsByHost = async () => {
+    fetch(`http://localhost:${PORT}/api/host/events/`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(response => response.json()) // Parse the JSON response
+      .then(data => {
+        console.log('GET request successful:', data);
+        // Process the retrieved data
+        setEvents(data);
+      })
+      .catch(error => {
+        console.error('GET request failed:', error);
+      });
+  }
+
+  useEffect(() => {
+    viewAllEventsByHost();
+  }, []);
   return (
     <div className="bg-background-primary mx-auto min-h-screen max-w-7xl px-6 py-8">
-      <EventShowcase title="Your Upcoming Events" events={popularEvents} />
-      <EventShowcase title="Previous Events Hosted" events={popularEvents} />
+      <EventShowcase title="Your Upcoming Events" events={events!} />
+      <EventShowcase title="Previous Events Hosted" events={events!} />
     </div>
   );
 };
