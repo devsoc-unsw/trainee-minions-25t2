@@ -25,46 +25,46 @@ const EventCard = memo(({ event }: EventCardProps) => {
 
   return (
     <>
-    <div 
-      className="hover:bg-button-background-hover w-85 flex-shrink-0 cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102 transform-gpu"
-      onClick={() => setIsModalOpen(true)}
-    >
-      <div className="relative">
-        <img
-          src={event.image}
-          alt={event.title}
-          className="h-48 w-full object-cover"
-        />
-        {event.status && (
-          <div
-            className={`absolute top-3 left-3 rounded px-2 py-1 text-xs font-medium ${GetStatus(
-              event.status,
-            )}`}
-          >
-            {event.status}
-          </div>
-        )}
+      <div
+        className="hover:bg-button-background-hover w-85 flex-shrink-0 transform-gpu cursor-pointer overflow-hidden rounded-lg border border-gray-200 bg-white shadow-sm transition-transform duration-400 hover:scale-102"
+        onClick={() => setIsModalOpen(true)}
+      >
+        <div className="relative">
+          <img
+            src={event.image}
+            alt={event.title}
+            className="h-48 w-full object-cover"
+          />
+          {event.status && (
+            <div
+              className={`absolute top-3 left-3 rounded px-2 py-1 text-xs font-medium ${GetStatus(
+                event.status,
+              )}`}
+            >
+              {event.status}
+            </div>
+          )}
+        </div>
+        <div className="p-4">
+          <h3 className="mb-2 line-clamp-2 text-sm font-semibold text-gray-900">
+            {event.title}
+          </h3>
+          <p className="mb-1 line-clamp-1 text-sm text-gray-600">
+            {event.date}
+          </p>
+          <p className="mb-2 line-clamp-1 text-sm text-gray-600">
+            {event.venue}
+          </p>
+          <p className="line-clamp-1 text-sm font-medium text-gray-900">
+            {event.price}
+          </p>
+        </div>
       </div>
-      <div className="p-4">
-        <h3 className="mb-2 line-clamp-2 text-sm font-semibold text-gray-900">
-          {event.title}
-        </h3>
-        <p className="mb-1 line-clamp-1 text-sm text-gray-600">
-          {event.date}
-        </p>
-        <p className="mb-2 line-clamp-1 text-sm text-gray-600">
-          {event.venue}
-        </p>
-        <p className="line-clamp-1 text-sm font-medium text-gray-900">
-          {event.price}
-        </p>
-      </div>
-    </div>
 
-      <EventModal 
-          event={event}
-          isOpen={isModalOpen}
-          onClose={() => setIsModalOpen(false)}
+      <EventModal
+        event={event}
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
       />
     </>
   );
