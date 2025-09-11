@@ -1,11 +1,11 @@
 import { User, Edit } from "lucide-react";
-import UserEventsGrid from "../components/UserEventsGrid"
+import UserEventsGrid from "../components/UserEventsGrid";
 
 export default function UserDashboard() {
   return (
-    <div className="flex flex-col min-h-screen w-full bg-cover bg-center">
+    <div className="flex min-h-screen w-full flex-col bg-cover bg-center">
       {/* Profile Header */}
-      <div className="flex justify-center w-full">
+      <div className="flex w-full justify-center">
         <div className="w-full max-w-4xl px-6">
           <div className="mt-24 mb-8">
             <div className="flex items-center justify-between rounded-lg bg-white p-6 shadow-lg">
@@ -17,13 +17,17 @@ export default function UserDashboard() {
                 </div>
                 {/* Profile Placeholder */}
                 <div className="ml-6">
-                  <div className="text-lg font-bold text-black uppercase">LOUIS LIM</div>
-                  <div className="text-sm text-black lowercase text-gray-400 italic">lim.b@email.com</div>
+                  <div className="text-lg font-bold text-black uppercase">
+                    LOUIS LIM
+                  </div>
+                  <div className="text-sm text-black text-gray-400 lowercase italic">
+                    lim.b@email.com
+                  </div>
                 </div>
               </div>
-              
+
               {/* Right side - Edit button */}
-              <button className="bg-red-500 rounded-md bg-gray-100 px-4 py-2 text-sm font-large text-gray-700 hover:bg-red-300 transition-colors cursor-pointer w-42 h-12 text-white">
+              <button className="font-large h-12 w-42 cursor-pointer rounded-md bg-gray-100 bg-red-500 px-4 py-2 text-sm text-gray-700 text-white transition-colors hover:bg-red-300">
                 <div className="flex items-center space-x-2">
                   <Edit className="h-6 w-6" />
                   <span className="text-lg">Edit Profile</span>
@@ -34,9 +38,9 @@ export default function UserDashboard() {
         </div>
       </div>
       {/* Hosts' Events Grid */}
-      <div className="w-full px-4 mb-8">
+      <div className="mb-8 w-full px-4">
         <UserEventsGrid></UserEventsGrid>
       </div>
     </div>
-  )
+  );
 }

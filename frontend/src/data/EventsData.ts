@@ -37,8 +37,7 @@ export const popularEvents: Event[] = [
   },
   {
     id: 3,
-    title:
-      "Louis Lim Estate",
+    title: "Louis Lim Estate",
     date: "Tuesday at 7:00 PM",
     venue: "Courtside Lakers",
     price: "From $1",
