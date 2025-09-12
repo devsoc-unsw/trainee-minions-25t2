@@ -1,28 +1,99 @@
 import type { Event } from "../data/EventsData";
-import { memo } from "react";
+import { memo, useMemo } from "react";
 import EventCard from "./EventsCard";
+import { Search } from "lucide-react";
+
+interface SearchFilters {
+  events: string;
+  locations: string;
+  tags: string[];
+}
 
 interface EventShowcaseProps {
   title: string;
   events: Event[];
+  searchFilters: SearchFilters;
 }
+
+// Simple filter function for title, location, and tags
+const filterEvents = (events: Event[], filters: SearchFilters): Event[] => {
+  if (!filters) return events;
+
+  return events.filter((event) => {
+    const {
+      events: eventSearch,
+      locations: locationSearch,
+      tags: selectedTags,
+    } = filters;
+
+    // Filter by title and venue
+    const matchesEvent =
+      !eventSearch ||
+      event.title.toLowerCase().includes(eventSearch.toLowerCase()) ||
+      event.venue.toLowerCase().includes(eventSearch.toLowerCase());
+
+    // Filter by location
+    const matchesLocation =
+      !locationSearch ||
+      event.location.toLowerCase().includes(locationSearch.toLowerCase());
+
+    // Filter by tags
+    const matchesTags =
+      selectedTags.length === 0 ||
+      selectedTags.every((selectedTag) => event.tags.includes(selectedTag));
+
+    return matchesEvent && matchesLocation && matchesTags;
+  });
+};
 
 // Main body that houses all event cards
 // Calls individual event card function for every item in events array
-const EventShowcase = memo(({ title, events }: EventShowcaseProps) => {
-  return (
-    <div className="mb-12">
-      <h2 className="mb-6 text-2xl font-bold text-gray-900">{title}</h2>
+const EventShowcase = memo(
+  ({ title, events, searchFilters }: EventShowcaseProps) => {
+    const filteredEvents = useMemo(() => {
+      if (!searchFilters) return events;
+      return filterEvents(events, searchFilters);
+    }, [events, searchFilters]);
 
-      {/* Independant scaling */}
-      <div className="flex items-start gap-4 overflow-x-auto pb-2">
-        {events.map((event) => (
-          // Note, key prop is not passed, by it used by react for more efficient rendering i think?
-          <EventCard key={event.id} event={event} />
-        ))}
+    // Check if we have active filters
+    const hasActiveFilters =
+      searchFilters &&
+      (searchFilters.events ||
+        searchFilters.locations ||
+        searchFilters.tags.length > 0);
+
+    return (
+      <div className="mb-12">
+        <h2 className="mb-6 text-2xl font-bold text-gray-900">{title}</h2>
+
+        {/* Show empty state if no events */}
+        {filteredEvents.length === 0 ? (
+          <div className="flex flex-col items-center justify-center rounded-lg border-2 border-dashed border-gray-200 bg-gray-50 py-16 text-center">
+            <div className="mb-4 text-gray-400">
+              <Search className="mx-auto h-16 w-16 text-gray-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-medium text-gray-900">
+              {hasActiveFilters
+                ? "No matching events found"
+                : "Nothing here right now"}
+            </h3>
+            <p className="max-w-md text-gray-500">
+              {hasActiveFilters
+                ? "Try adjusting your search filters or browse other categories"
+                : "Check back later for new events in this category"}
+            </p>
+          </div>
+        ) : (
+          /* Independent scaling */
+          <div className="flex items-start gap-4 overflow-x-auto pb-2">
+            {filteredEvents.map((event) => (
+              <EventCard key={event.id} event={event} /> // Whenever map is used, MUST use key
+            ))}
+          </div>
+        )}
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 export default EventShowcase;

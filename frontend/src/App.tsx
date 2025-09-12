@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { useState } from "react";
 import Navbar from "./components/Navbar";
 import LoginPage from "./Pages/login-page";
 import Background from "./components/Background";
@@ -6,14 +7,31 @@ import EventsGrid from "./components/EventsGrid";
 import HeroComponent from "./components/HeroComponent";
 import UserDashboard from "./Pages/user-dashboard";
 
+interface SearchFilters {
+  events: string;
+  locations: string;
+  tags: string[];
+}
+
 // Create a Layout component for the main content
 const Layout = () => {
+  const [searchFilters, setSearchFilters] = useState<SearchFilters>({
+    events: "",
+    locations: "",
+    tags: [],
+  });
+
+  // Handle search from Navbar
+  const handleSearch = (filters: SearchFilters) => {
+    setSearchFilters(filters);
+  };
+
   return (
     <>
       <Background />
-      <Navbar />
+      <Navbar onSearch={handleSearch} />
       <HeroComponent />
-      <EventsGrid />
+      <EventsGrid searchFilters={searchFilters} />
     </>
   );
 };
