@@ -5,6 +5,7 @@ import Background from "./components/Background";
 import EventsGrid from "./components/EventsGrid";
 import HeroComponent from './components/HeroComponent';
 import UserDashboard from "./Pages/user-dashboard";
+import CreateEventPage from "./Pages/create-event-page";
 
 // Create a Layout component for the main content
 const Layout = () => {
@@ -25,6 +26,7 @@ function App() {
         <Route path="/" element={<Layout />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
+        <Route path="/create-event" element={<CreateEventPage/>} />
       </Routes>
     </BrowserRouter>
   );

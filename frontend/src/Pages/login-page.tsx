@@ -54,7 +54,7 @@ export default function LoginPage() {
             placeholder="Email"
             className="mb-8 block w-full rounded-md border border-gray-300 px-3 py-2 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 focus:outline-none sm:text-sm"
           />
-          <button className="rounded-md bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600">
+          <button className="rounded-md bg-blue-500 px-4 py-2 text-white transition-colors hover:bg-blue-600 hover:cursor-pointer">
             Continue
           </button>
         </form>
