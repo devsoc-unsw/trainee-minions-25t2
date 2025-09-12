@@ -6,6 +6,7 @@ import Background from "./components/Background";
 import EventsGrid from "./components/EventsGrid";
 import HeroComponent from "./components/HeroComponent";
 import UserDashboard from "./Pages/user-dashboard";
+import CreateEventPage from "./Pages/create-event-page";
 
 interface SearchFilters {
   events: string;
@@ -43,6 +44,7 @@ function App() {
         <Route path="/" element={<Layout />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
+        <Route path="/create-event" element={<CreateEventPage/>} />
       </Routes>
     </BrowserRouter>
   );
