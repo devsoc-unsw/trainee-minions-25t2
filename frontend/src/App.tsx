@@ -45,7 +45,6 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/quiz" element={<Quiz />} />
-
       </Routes>
     </BrowserRouter>
   );
