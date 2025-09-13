@@ -28,8 +28,9 @@ const CompatibilityResults = () => {
     }
 
     useEffect(() => {
-        console.log(PORT);
+        console.log(PORT, 'backend port');
         calculateUserPreferences();
+        console.log(bestMatchName);
     }, [setBestMatchName])
 
     return (

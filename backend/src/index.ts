@@ -25,6 +25,7 @@ async function startServer() {
     // Routes & middleware
     app.use(express.json());
     app.use(cors());
+    app.use(userRoutes);
     app.use('/api/results', router);
     app.use(errorMiddleware);
   } catch (error) {

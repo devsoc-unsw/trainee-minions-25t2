@@ -53,6 +53,8 @@ async function calculateUserPreferences(req: Request, res: Response) {
     // Split users into two groups (for now, first half matches with second half)
     const groupA = users.slice(0, Math.floor(users.length / 2));
     const groupB = users.slice(Math.floor(users.length / 2));
+    console.log(groupA);
+    console.log(groupB);
     const N = groupA.length;
 
     let pref: number[][] = []; // preference matrix // [[][]]
