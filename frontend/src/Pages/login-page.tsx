@@ -12,7 +12,11 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  
+  const [gender, setGender] = useState("");
+  const [otherGender, setOtherGender] = useState("");
+  const [sexuality, setSexuality] = useState("");
+  const [otherSexuality, setOtherSexuality] = useState("");
+
   const navigate = useNavigate();
 
     useEffect(() => {
@@ -21,6 +25,7 @@ export default function LoginPage() {
         navigate("/user-dashboard");
       }
     }, []);
+
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
@@ -56,7 +61,7 @@ export default function LoginPage() {
     try {
       const response = await axios.post(
         `http://localhost:${PORT}/user/register`,
-        { username: username, email: email, password: password }
+        { username: username, email: email, password: password, sexuality: sexuality, gender: gender }
       );
       localStorage.setItem("sessionId", response.data.sessionId);
       const data = {
@@ -174,6 +179,66 @@ export default function LoginPage() {
               required
             />
           </div>
+
+          {activeTab === "signup" && (
+            <div className="flex flex-col space-y-3">
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                required
+              >
+                <option value="" disabled>
+                  Select your gender
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="non-binary">Non-binary</option>
+                <option value="other">Other</option>
+              </select>
+
+              {gender === "other" && (
+                <input
+                  type="text"
+                  placeholder="Please specify"
+                  value={otherGender}
+                  onChange={(e) => setOtherGender(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 placeholder-gray-400 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                  required
+                />
+              )}
+            </div>
+          )}
+
+          {activeTab === "signup" && (
+            <div className="flex flex-col space-y-3">
+              <select
+                value={sexuality}
+                onChange={(e) => setSexuality(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                required
+              >
+                <option value="" disabled>
+                  Select your sexuality
+                </option>
+                <option value="straight">Straight</option>
+                <option value="bisexual">Bisexual / Pansexual</option>
+                <option value="gay">Gay / Lesbain</option>
+                <option value="other">Other</option>
+              </select>
+
+              {sexuality === "other" && (
+                <input
+                  type="text"
+                  placeholder="Please specify"
+                  value={otherSexuality}
+                  onChange={(e) => setOtherSexuality(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 placeholder-gray-400 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                  required
+                />
+              )}
+            </div>
+          )}
 
           {/* Forgot Password Link - Only show on login */}
           {activeTab === "login" && (
