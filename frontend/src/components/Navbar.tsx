@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import Hamburger from "./Hamburger";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
+import { PORT } from "../../../backend/config.json";
 
 interface SearchFilters {
   events: string;
@@ -108,6 +110,23 @@ const Navbar = ({ onSearch }: NavbarProps) => {
     navigate("/login");
     setLoginIsClicked(false);
   };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`http://localhost:${PORT}/user/logout`, {
+        headers: {
+          session: localStorage.getItem("sessionId"), 
+        },
+      });
+      localStorage.removeItem("sessionId");
+      localStorage.removeItem("userData");
+      navigate("/");
+    } catch(err) {
+      console.error("Logout failed: ", err);
+      navigate("/");
+    }
+  }
 
   // Handle input changes for text fields
   const handleInputChange = (field: string, value: string) => {
@@ -374,6 +393,13 @@ const Navbar = ({ onSearch }: NavbarProps) => {
                 >
                   <Building2 size={16} className="text-neutral-400" />
                   Hosts
+                </button>
+                <button
+                  onClick={handleLogout}
+                  className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors"
+                >
+                  <KeyRound size={16} className="text-neutral-400" />
+                  Logout
                 </button>
               </div>
             )}

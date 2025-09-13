@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { PORT } from "../../../backend/config.json";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import backgroundSvg from "../assets/royal-botanic-gardens-sydney-australia 1.svg";
 
@@ -9,20 +12,63 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  
+  const navigate = useNavigate();
 
-  const handleEmailLogin = (e) => {
+    useEffect(() => {
+      if (localStorage.getItem("sessionId")) {
+        // alert("User is already logged in.");
+        navigate("/user-dashboard");
+      }
+    }, []);
+
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     console.log("Email login attempted with:", { email, password });
+    try {
+      const response = await axios.post(`http://localhost:${PORT}/user/login`, {
+        email: email,
+        password: password,
+      });
+
+      const data = {
+        email,
+        loginTime: new Date(),
+      };
+      const dataString = JSON.stringify(data);
+      localStorage.setItem("userData", dataString);
+
+      localStorage.setItem("sessionId", response.data);
+      navigate("/user-dashboard");
+    } catch (err) {
+      console.error(err);
+    }
     
     // Simulate failed login for demonstration
-    setErrorMessage("Account not found. Please check your credentials or sign up for a new account.");
+    // setErrorMessage("Account not found. Please check your credentials or sign up for a new account.");
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     console.log("Signup attempted with:", { username, email, password });
     setErrorMessage("");
-    // Handle signup logic here
+    
+    try {
+      const response = await axios.post(
+        `http://localhost:${PORT}/user/register`,
+        { username: username, email: email, password: password }
+      );
+      localStorage.setItem("sessionId", response.data.sessionId);
+      const data = {
+        email,
+        loginTime: new Date(),
+      };
+      const dataString = JSON.stringify(data);
+      localStorage.setItem("userData", dataString);
+      navigate('/user-dashboard');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const toggleHeart = () => {
