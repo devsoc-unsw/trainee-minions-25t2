@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
 import { Sticker, Heart } from 'lucide-react';
 import { questions } from './questions';
+import { useNavigate } from 'react-router-dom';
 
 const Quiz = () => {
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
   const [isCompleted, setIsCompleted] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Loading screen
@@ -51,7 +53,7 @@ const Quiz = () => {
         <div className={`transition-opacity duration-300 ease-in-out ${contentVisible ? 'opacity-100' : 'opacity-0'}`}>
           {!isCompleted ? (
             <>
-              <div className="text-2xl font-medium leading-relaxed mb-10 text-gray-800 max-w-2xl">
+              <div className="text-3xl font-medium leading-relaxed mb-10 text-gray-800 max-w-2xl">
                 {questions[currentQuestionIndex].text}
               </div>
               
@@ -62,7 +64,7 @@ const Quiz = () => {
             </>
           ) : (
             <>
-              <div className="text-2xl font-medium leading-relaxed mb-10 text-gray-800 gap-3 flex flex-row justify-center items-center">
+              <div className="text-3xl font-medium leading-relaxed mb-10 text-gray-800 gap-3 flex flex-row justify-center items-center">
                 Quiz Complete!
                 <Heart className='text-red-500'/>
               </div>
@@ -74,6 +76,15 @@ const Quiz = () => {
                   </div>
                   <div className="text-gray-600 italic">
                     Feel free to close this window
+                  </div>
+                  {/* Back button */}
+                  <div className = "p-6">
+                      <button 
+                          onClick = {() => navigate('/')}
+                          className = "px-5 py-3 bg-orange-600 font-bold text-white rounded-lg hover:bg-orange-700"
+                      >
+                          Back to Home Screen!
+                      </button>
                   </div>
                 </div>
               </div>
