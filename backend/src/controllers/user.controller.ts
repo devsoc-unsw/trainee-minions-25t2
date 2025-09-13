@@ -3,9 +3,9 @@ import * as authService from "../services/user.services";
 
 async function register(req: Request, res: Response) {
   try {
-    const { username, email, password } = req.body;
+    const { username, email, password, gender, sexuality } = req.body;
     console.log(req.body)
-    const auth = await authService.authRegister(username, email, password);
+    const auth = await authService.authRegister(username, email, password, gender, sexuality);
     res.json(auth);
   } catch (err: any) {
     console.error("Registration failed:", err);
