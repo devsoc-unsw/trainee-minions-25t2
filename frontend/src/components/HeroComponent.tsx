@@ -1,6 +1,9 @@
 import HeroImage from "../assets/hero-component.svg";
+import { useNavigate } from "react-router-dom";
 
 const HeroComponent = () => {
+  const navigate = useNavigate();
+
   return (
     <div className="mx-auto flex w-full max-w-7xl flex-col items-center bg-gray-50 px-4 py-12 lg:flex-row lg:py-16">
       <div className="w-full px-4 text-center lg:ml-7 lg:w-1/2 lg:px-16 lg:text-left">
@@ -8,9 +11,12 @@ const HeroComponent = () => {
           Find Your <span className="text-pink-500">Perfect</span> Match!
         </h1>
         <p className="mb-10 text-lg leading-normal font-bold text-purple-600 sm:text-xl lg:text-xl xl:text-3xl">
-          Connect with like-minded people
+          Connect with like-minded people!
         </p>
-        <button className="rounded-lg bg-indigo-500 px-6 py-3 font-bold text-white transition-colors hover:bg-indigo-700">
+        <button
+          onClick = {() => navigate('/login')} 
+          className="rounded-lg bg-indigo-500 px-6 py-3 font-bold text-white transition-colors hover:bg-indigo-700"
+        >
           Get Started 💗
         </button>
       </div>

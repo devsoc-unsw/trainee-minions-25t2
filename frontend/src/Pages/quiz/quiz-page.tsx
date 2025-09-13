@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Sticker, Heart } from "lucide-react";
 import { openQuestions, scaleQuestions, type Question } from "./questions";
+import { useNavigate } from "react-router-dom";
 
 interface PersonalityScores {
   introversion: number;
@@ -28,6 +29,7 @@ const Quiz = () => {
       cautious: 0,
     },
   );
+  const navigate = useNavigate();
 
   useEffect(() => {
     // Shuffle questions left and right randomly
@@ -133,7 +135,7 @@ const Quiz = () => {
         >
           {!isCompleted ? (
             <>
-              <div className="mb-10 max-w-2xl text-2xl leading-relaxed font-medium text-gray-800">
+              <div className="mb-10 max-w-2xl text-3xl leading-relaxed font-medium text-gray-800">
                 {currentQuestion.text}
               </div>
 
@@ -185,6 +187,16 @@ const Quiz = () => {
                   {/* Debug: Show personality scores, remove post editing */}
                   <div className="mt-4 text-xs text-gray-500">
                     Personality Scores: {JSON.stringify(personalityScores)}
+                  </div>
+
+                  {/* Back button */}
+                  <div className = "p-6">
+                      <button 
+                          onClick = {() => navigate('/')}
+                          className = "px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                      >
+                          Back to Events!
+                      </button>
                   </div>
                 </div>
               </div>
