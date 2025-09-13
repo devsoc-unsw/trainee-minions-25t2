@@ -55,6 +55,35 @@ const Quiz = () => {
     return () => clearTimeout(timer);
   }, []);
 
+const submitQuizResponse = async (scores: PersonalityScores) => {
+  try {
+    // Get session ID from localStorage
+    const sessionID = localStorage.getItem('sessionId'); // Double check this
+    
+    const response = await fetch('/api/quiz-responses', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      sessionID: sessionID,
+      PersonalityResults: {
+        E: scores.extraversion,
+        I: scores.introversion,
+        O: scores.organized,
+        S: scores.spontaneous,
+        R: scores.riskTaker,
+        C: scores.cautious
+      }
+    }),
+  });
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error submitting response:', error);
+  }
+};
+
   const updatePersonalityScores = (question: Question, value: number) => {
     if (question.type === "scale" && question.traits) {
       setPersonalityScores((prev) => {
@@ -88,7 +117,7 @@ const Quiz = () => {
     }
   };
 
-  const handleNextQuestion = (): void => {
+  const handleNextQuestion = async (): Promise<void> => {
     const currentQuestion = selectedQuestions[currentQuestionIndex];
 
     // Update personality scores if it's a scale question
@@ -96,11 +125,13 @@ const Quiz = () => {
 
     setContentVisible(false);
 
-    setTimeout(() => {
+    // Submit quiz is async, update this line
+    setTimeout(async () => {
       if (currentQuestionIndex < selectedQuestions.length - 1) {
         setCurrentQuestionIndex((prev) => prev + 1);
       } else {
         setIsCompleted(true);
+        await submitQuizResponse(personalityScores);
       }
     }, 300);
 
@@ -190,10 +221,10 @@ const Quiz = () => {
                   </div>
 
                   {/* Back button */}
-                  <div className = "p-6">
+                  <div className="p-6">
                       <button 
-                          onClick = {() => navigate('/')}
-                          className = "px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                          onClick={() => navigate('/')}
+                          className="px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
                       >
                           Back to Events!
                       </button>
