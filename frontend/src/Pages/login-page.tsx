@@ -22,12 +22,30 @@ export default function LoginPage() {
       }
     }, []);
 
-  const handleEmailLogin = (e) => {
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     console.log("Email login attempted with:", { email, password });
+    try {
+      const response = await axios.post(`http://localhost:${PORT}/user/login`, {
+        email: email,
+        password: password,
+      });
+
+      const data = {
+        email,
+        loginTime: new Date(),
+      };
+      const dataString = JSON.stringify(data);
+      localStorage.setItem("userData", dataString);
+
+      localStorage.setItem("sessionId", response.data);
+      navigate("/user-dashboard");
+    } catch (err) {
+      console.error(err);
+    }
     
     // Simulate failed login for demonstration
-    setErrorMessage("Account not found. Please check your credentials or sign up for a new account.");
+    // setErrorMessage("Account not found. Please check your credentials or sign up for a new account.");
   };
 
   const handleSignup = async (e) => {
