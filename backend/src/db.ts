@@ -29,19 +29,19 @@ export async function connectToDatabase() {
     usersCollection = db.collection("users");
 
     // Initialize collections if they don't exist
-    const usersCount = await usersCollection.countDocuments();
-    if (usersCount === 0) {
-      await usersCollection.insertOne({
-        users: [],
-      });
-    }
+    // const usersCount = await usersCollection.countDocuments();
+    // if (usersCount === 0) {
+    //   await usersCollection.insertOne({
+    //     users: [],
+    //   });
+    // }
 
-    const sessionsCount = await sessionsCollection.countDocuments();
-    if (sessionsCount === 0) {
-      await sessionsCollection.insertOne({
-        sessions: [],
-      });
-    }
+    // const sessionsCount = await sessionsCollection.countDocuments();
+    // if (sessionsCount === 0) {
+    //   await sessionsCollection.insertOne({
+    //     sessions: [],
+    //   });
+    // }
   } catch (error) {
     console.error("Error found when connecting to MongoDB: ", error);
   }
