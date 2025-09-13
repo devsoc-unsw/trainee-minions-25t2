@@ -1,10 +1,13 @@
-// Maps HTTP requests to the controller function
-// e.g. router.post("/user/register", userController.register);
-
-import express, { NextFunction } from "express";
-import * as userController from "../controllers/user.controller"
+import express from "express";
+import * as usersController from "../controllers/user.controller"
 import { sessionMiddleware } from "../middleware";
 
 const router = express.Router();
+
+router.post("/user/register", usersController.register);
+
+router.post("/user/login", usersController.login);
+
+router.delete("/user/logout", sessionMiddleware, usersController.logout);
 
 export default router;

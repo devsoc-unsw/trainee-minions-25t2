@@ -15,6 +15,8 @@ import {
 } from "lucide-react";
 import Hamburger from "./Hamburger";
 import { useNavigate } from "react-router-dom";
+import axios from "axios"
+import { PORT } from "../../../backend/config.json";
 
 interface SearchFilters {
   events: string;
@@ -50,6 +52,7 @@ const Navbar = ({ onSearch }: NavbarProps) => {
   const [isFocused, setIsFocused] = useState<string | null>(null);
   const [loginIsClicked, setLoginIsClicked] = useState(false);
   const [tagsDropdownOpen, setTagsDropdownOpen] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   // Search input states with tags array
   const [searchInputs, setSearchInputs] = useState({
@@ -72,6 +75,11 @@ const Navbar = ({ onSearch }: NavbarProps) => {
   const toggleTagsDropdown = () => {
     setTagsDropdownOpen(!tagsDropdownOpen);
   };
+
+  useEffect(() => {
+    const sessionId = localStorage.getItem("sessionId");
+    setIsLoggedIn(!!sessionId);
+  }, []);
 
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -108,6 +116,23 @@ const Navbar = ({ onSearch }: NavbarProps) => {
     navigate("/login");
     setLoginIsClicked(false);
   };
+
+  const handleLogout = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.delete(`http://localhost:${PORT}/user/logout`, {
+        headers: {
+          session: localStorage.getItem("sessionId"), 
+        },
+      });
+      localStorage.removeItem("sessionId");
+      localStorage.removeItem("userData");
+      navigate("/");
+    } catch(err) {
+      console.error("Logout failed: ", err);
+      navigate("/");
+    }
+  }
 
   // Handle input changes for text fields
   const handleInputChange = (field: string, value: string) => {
@@ -343,14 +368,14 @@ const Navbar = ({ onSearch }: NavbarProps) => {
             Create Events
           </button>
 
-          {/* Login Dropdown */}
+          {/* Login/Logout Dropdown */}
           <div className="relative">
             <button
               className="hover:text-button-text-hover hover:bg-button-background-hover flex cursor-pointer items-center gap-2 rounded-3xl px-3 py-2 transition-colors"
               onClick={toggleLoginDrop}
             >
               <KeyRound size={16} />
-              Login
+              {isLoggedIn ? "Account" : "Login"}
               {!loginIsClicked ? (
                 <ChevronDown size={16} className="pt-[3px] pl-[2px]" />
               ) : (
@@ -358,29 +383,40 @@ const Navbar = ({ onSearch }: NavbarProps) => {
               )}
             </button>
 
-            {/* Dropdown Menu */}
             {loginIsClicked && (
               <div className="absolute right-0 z-50 mt-2 w-48 rounded-xl border border-neutral-200 bg-white py-2 shadow-lg">
-                <button
-                  onClick={handleUserLogin}
-                  className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors"
-                >
-                  <User size={16} className="text-neutral-400" />
-                  Users
-                </button>
-                <button
-                  onClick={handleHostLogin}
-                  className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors"
-                >
-                  <Building2 size={16} className="text-neutral-400" />
-                  Hosts
-                </button>
+                {isLoggedIn ? (
+                  <button
+                    onClick={handleLogout}
+                    className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors"
+                  >
+                    <KeyRound size={16} className="text-neutral-400" />
+                    Logout
+                  </button>
+                ) : (
+                  <>
+                    <button
+                      onClick={handleUserLogin}
+                      className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors"
+                    >
+                      <User size={16} className="text-neutral-400" />
+                      Users
+                    </button>
+                    <button
+                      onClick={handleHostLogin}
+                      className="hover:bg-button-background-hover text-button-text flex w-full items-center gap-3 px-4 py-2 text-left text-sm transition-colors"
+                    >
+                      <Building2 size={16} className="text-neutral-400" />
+                      Hosts
+                    </button>
+                  </>
+                )}
               </div>
             )}
           </div>
         </div>
       </div>
-
+      
       {/* Once the screen size hits lg and below, hamburger appears. Hidden is active while screen is lg+= */}
       <div className="block text-right font-bold lg:hidden">
         <Hamburger />

@@ -1,4 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import axios from "axios";
+import { PORT } from "../../../backend/config.json";
+import { Link, useNavigate } from "react-router-dom";
 import { Heart } from "lucide-react";
 import backgroundSvg from "../assets/royal-botanic-gardens-sydney-australia 1.svg";
 
@@ -9,20 +12,68 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [username, setUsername] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
+  const [gender, setGender] = useState("");
+  const [otherGender, setOtherGender] = useState("");
+  const [sexuality, setSexuality] = useState("");
+  const [otherSexuality, setOtherSexuality] = useState("");
 
-  const handleEmailLogin = (e) => {
+  const navigate = useNavigate();
+
+    useEffect(() => {
+      if (localStorage.getItem("sessionId")) {
+        // alert("User is already logged in.");
+        navigate("/user-dashboard");
+      }
+    }, []);
+
+
+  const handleEmailLogin = async (e) => {
     e.preventDefault();
     console.log("Email login attempted with:", { email, password });
+    try {
+      const response = await axios.post(`http://localhost:${PORT}/user/login`, {
+        email: email,
+        password: password,
+      });
+
+      const data = {
+        email,
+        loginTime: new Date(),
+      };
+      const dataString = JSON.stringify(data);
+      localStorage.setItem("userData", dataString);
+
+      localStorage.setItem("sessionId", response.data);
+      navigate("/user-dashboard");
+    } catch (err) {
+      console.error(err);
+    }
     
     // Simulate failed login for demonstration
-    setErrorMessage("Account not found. Please check your credentials or sign up for a new account.");
+    // setErrorMessage("Account not found. Please check your credentials or sign up for a new account.");
   };
 
-  const handleSignup = (e) => {
+  const handleSignup = async (e) => {
     e.preventDefault();
     console.log("Signup attempted with:", { username, email, password });
     setErrorMessage("");
-    // Handle signup logic here
+    
+    try {
+      const response = await axios.post(
+        `http://localhost:${PORT}/user/register`,
+        { username: username, email: email, password: password, gender: gender, sexuality: sexuality }
+      );
+      localStorage.setItem("sessionId", response.data.sessionId);
+      const data = {
+        email,
+        loginTime: new Date(),
+      };
+      const dataString = JSON.stringify(data);
+      localStorage.setItem("userData", dataString);
+      navigate('/user-dashboard');
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const toggleHeart = () => {
@@ -86,7 +137,7 @@ export default function LoginPage() {
         </div>
 
         {/* Login/Signup Form */}
-        <div className="space-y-4 h-[300px]">
+        <div className="space-y-4 h-[500px]">
           {/* Error Message */}
           {errorMessage && (
             <div className="p-3 rounded-lg bg-red-50 border border-red-200">
@@ -128,6 +179,66 @@ export default function LoginPage() {
               required
             />
           </div>
+
+          {activeTab === "signup" && (
+            <div className="flex flex-col space-y-3">
+              <select
+                value={gender}
+                onChange={(e) => setGender(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                required
+              >
+                <option value="" disabled>
+                  Select your gender
+                </option>
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="non-binary">Non-binary</option>
+                <option value="other">Other</option>
+              </select>
+
+              {gender === "other" && (
+                <input
+                  type="text"
+                  placeholder="Please specify"
+                  value={otherGender}
+                  onChange={(e) => setOtherGender(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 placeholder-gray-400 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                  required
+                />
+              )}
+            </div>
+          )}
+
+          {activeTab === "signup" && (
+            <div className="flex flex-col space-y-3">
+              <select
+                value={sexuality}
+                onChange={(e) => setSexuality(e.target.value)}
+                className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                required
+              >
+                <option value="" disabled>
+                  Select your sexuality
+                </option>
+                <option value="straight">Straight</option>
+                <option value="bisexual">Bisexual / Pansexual</option>
+                <option value="gay">Gay / Lesbian</option>
+                <option value="other">Other</option>
+              </select>
+
+              {sexuality === "other" && (
+                <input
+                  type="text"
+                  placeholder="Please specify"
+                  value={otherSexuality}
+                  onChange={(e) => setOtherSexuality(e.target.value)}
+                  className="w-full rounded-lg border border-gray-300 px-4 py-3 text-gray-700 placeholder-gray-400 focus:border-red-500 focus:outline-none focus:ring-2 focus:ring-red-200 transition-all"
+                  required
+                />
+              )}
+            </div>
+          )}
 
           {/* Forgot Password Link - Only show on login */}
           {activeTab === "login" && (
