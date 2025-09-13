@@ -1,18 +1,44 @@
 import { useNavigate } from "react-router-dom";
+import { PORT } from '../../../backend/config.json';
+import { useEffect, useState } from "react";
 
 const CompatibilityResults = () => {
     const navigate = useNavigate();
+    // const [data, setData] = useState('');
 
     // replace this with real quiz result data
-    const bestMatchName = "Alex Johnson";
+    const [bestMatchName, setBestMatchName] = useState("Alex Johnson");
+
+    const calculateUserPreferences = async () => {
+        await fetch(`http://localhost:${PORT}/api/results/`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+                console.log('GET request successful:', data);
+                // Process the retrieved data
+                setBestMatchName(data);
+            })
+            .catch(error => {
+                console.error('GET request failed:', error);
+            });
+    }
+
+    useEffect(() => {
+        console.log(PORT);
+        calculateUserPreferences();
+    }, [setBestMatchName])
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-5">
             {/* Back button */}
-            <div className = "p-6">
-                <button 
-                    onClick = {() => navigate('/')}
-                    className = "px-5 py-3 bg-orange-600 font-bold text-white rounded-lg hover:bg-orange-700"
+            <div className="p-6">
+                <button
+                    onClick={() => navigate('/')}
+                    className="px-5 py-3 bg-orange-600 font-bold text-white rounded-lg hover:bg-orange-700"
                 >
                     Back to Events!
                 </button>

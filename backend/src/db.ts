@@ -11,6 +11,8 @@ export let usersCollection: Collection;
 export let mailsCollection: Collection;
 export let dataCollection: Collection;
 
+export let quizCollection: Collection;
+
 export async function connectToDatabase() {
   try {
     dotenv.config();
@@ -27,6 +29,7 @@ export async function connectToDatabase() {
 
     sessionsCollection = db.collection("sessions");
     usersCollection = db.collection("users");
+    quizCollection = db.collection("quizResults");
 
     // Initialize collections if they don't exist
     const usersCount = await usersCollection.countDocuments();

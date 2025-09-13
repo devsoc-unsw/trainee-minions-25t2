@@ -4,7 +4,7 @@ import { PORT } from "../config.json";
 import { errorMiddleware } from "./middleware";
 import cors from "cors";
 import { connectToDatabase, closeDatabaseConnection } from "./db";
-import userRoutes from "./routes/user.routes"; 
+import userRoutes from "./routes/user.routes";
 import router from "./routes/quiz.routes";
 
 dotenv.config();
@@ -25,6 +25,7 @@ async function startServer() {
     // Routes & middleware
     app.use(express.json());
     app.use(cors());
+    app.use('/api/results', router);
     app.use(errorMiddleware);
   } catch (error) {
     console.error("Error starting the server:", error);

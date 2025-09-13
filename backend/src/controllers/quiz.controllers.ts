@@ -2,13 +2,53 @@
 import { Request, Response } from "express";
 import * as userService from "../services/user.services";
 import { } from "../constants/types";
+import { quizCollection } from "../db";
 
 async function calculateUserPreferences(req: Request, res: Response) {
   try { // calculate *pref* variable
     // userResultsCollection = [{userID: x, Introversion: x, Extraversion: x, etc. }, {}, {}, {}]
     // you'll need to separate the sets based off their gender, no route for that yet though.
     // so just pretend you're given 4 people or 6 people & take first half to match w second half for now
-    const users = await userResultsCollection.find().toArray();
+    // const users = await userResultsCollection.find().toArray();
+
+    let users = [
+      {
+        userID: '1',
+        introversion: 8,
+        extraversion: 2,
+        spontaneous: 7,
+        organized: 1,
+        riskTaker: 2,
+        cautious: 4,
+      }
+      , {
+        userID: '2',
+        introversion: 6,
+        extraversion: 6,
+        spontaneous: 1,
+        organized: 3,
+        riskTaker: 4,
+        cautious: 1,
+      },
+      {
+        userID: '3',
+        introversion: 7,
+        extraversion: 2,
+        spontaneous: 1,
+        organized: 4,
+        riskTaker: 2,
+        cautious: 5,
+      },
+      {
+        userID: '4',
+        introversion: 1,
+        extraversion: 8,
+        spontaneous: 9,
+        organized: 2,
+        riskTaker: 9,
+        cautious: 3,
+      }
+    ]
 
     // Split users into two groups (for now, first half matches with second half)
     const groupA = users.slice(0, Math.floor(users.length / 2));
@@ -31,7 +71,7 @@ async function calculateUserPreferences(req: Request, res: Response) {
       // Sort by compatibility (highest first)
       compatibilityScores.sort((a, b) => b.score - a.score);
       const preferences = compatibilityScores.map(item => item.index);
-      
+
       pref.push(preferences);
     }
 
@@ -39,16 +79,16 @@ async function calculateUserPreferences(req: Request, res: Response) {
     for (let i = 0; i < groupB.length; i++) {
       const personB = groupB[i];
       let compatibilityScores: { index: number, score: number }[] = [];
-      
+
       for (let j = 0; j < groupA.length; j++) {
         const personA = groupA[j];
         const compatibility = calculateCompatibility(personB, personA);
         compatibilityScores.push({ index: j, score: compatibility });
       }
-      
+
       compatibilityScores.sort((a, b) => b.score - a.score);
       const preferences = compatibilityScores.map(item => item.index);
-      
+
       pref.push(preferences);
     }
 
@@ -64,6 +104,13 @@ async function calculateUserPreferences(req: Request, res: Response) {
     });
 
     const res = finalMatches;
+    quizCollection.insertOne({
+      id: 1,
+      result: res,
+    }); // new item inserted into db through backend
+
+    console.log(res);
+
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
@@ -72,7 +119,7 @@ async function calculateUserPreferences(req: Request, res: Response) {
 // Helper function which uses Cosine Similarity to calculate how compatible two people are based on their personality scores
 function calculateCompatibility(person1: any, person2: any): number {
   const traits = ['introversion', 'extraversion', 'spontaneous', 'organized', 'riskTaker', 'cautious'];
-  
+
   let dot = 0, normA = 0, normB = 0;
 
   for (const t of traits) {
@@ -89,64 +136,64 @@ function wPrefersM1OverM(prefer: number[][], w: number, m: number, m1: number, N
   // w is the woman's index (in the second half of prefer matrix)
   // Check if woman w prefers man m1 over man m
   const womenRowIndex = w + N; // Women's preferences start at row N
-  
+
   for (let i = 0; i < N; i++) {
-      // If m1 comes before m in woman's preference list
-      if (prefer[womenRowIndex][i] === m1) {
-          return true; // She prefers her current partner m1
-      }
-      // If m comes before m1 in woman's preference list  
-      if (prefer[womenRowIndex][i] === m) {
-          return false; // She prefers the new suitor m
-      }
+    // If m1 comes before m in woman's preference list
+    if (prefer[womenRowIndex][i] === m1) {
+      return true; // She prefers her current partner m1
+    }
+    // If m comes before m1 in woman's preference list  
+    if (prefer[womenRowIndex][i] === m) {
+      return false; // She prefers the new suitor m
+    }
   }
   return false;
 }
 
 function stableMatching(prefer: number[][]): number[] {
   const N = prefer[0].length; // Number of people in each group
-    
+
   // Stores partner of women. wPartner[i] indicates the partner assigned to woman i
   const wPartner: number[] = new Array(N).fill(-1);
-  
+
   // An array to store availability of men. If mFree[i] is false, then man i is free
   const mFree: boolean[] = new Array(N).fill(false);
-  
+
   let freeCount = N; // Count of free men
-  
+
   // While there are free men
   while (freeCount > 0) {
     // Find the first free man
     let m: number;
     for (m = 0; m < N; m++) {
-        if (mFree[m] === false) {
-            break;
-        }
+      if (mFree[m] === false) {
+        break;
+      }
     }
-      
+
     // Go through all women according to man m's preferences
     for (let i = 0; i < N && mFree[m] === false; i++) {
       const w = prefer[m][i]; // Woman that man m prefers at position i
-        
+
       // If the woman is free
       if (wPartner[w] === -1) {
-          wPartner[w] = m;
-          mFree[m] = true;
-          freeCount--;
+        wPartner[w] = m;
+        mFree[m] = true;
+        freeCount--;
       } else {
         // Woman is already engaged
         const currentPartner = wPartner[w];
-        
+
         // Check if woman prefers new suitor over current partner
         if (!wPrefersM1OverM(prefer, w, m, currentPartner, N)) {
-            // Woman prefers new suitor, break current engagement
-            wPartner[w] = m;
-            mFree[m] = true;
-            mFree[currentPartner] = false; // Current partner becomes free
+          // Woman prefers new suitor, break current engagement
+          wPartner[w] = m;
+          mFree[m] = true;
+          mFree[currentPartner] = false; // Current partner becomes free
         }
       }
     }
   }
-  return wPartner;  
+  return wPartner;
 }
 export { calculateUserPreferences };
