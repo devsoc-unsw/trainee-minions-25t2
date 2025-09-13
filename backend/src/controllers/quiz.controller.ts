@@ -12,6 +12,7 @@ export interface PersonalityResultsProps {
 }
 
 async function saveQuizResponse(req: Request, res: Response) {
+  console.log(req.body);
   try {
     // const { sessionID, PersonalityResults } = req.body;
     console.log(req.body);
@@ -34,7 +35,7 @@ async function saveQuizResponse(req: Request, res: Response) {
     await userQuizResponsesCollection.insertOne(quizResponse);
     res.json({ success: true });
   } catch (err: any) {
-    console.error("Quiz response save failed:", err);
+    console.error("Quiz response save failed !!!!!:", err);
     res.status(400).json({ error: err.message });
   }
 }

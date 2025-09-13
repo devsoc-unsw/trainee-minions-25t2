@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { Sticker, Heart } from "lucide-react";
 import { openQuestions, scaleQuestions, type Question } from "./questions";
 import { useNavigate } from "react-router-dom";
-
+import { PORT } from "../../../../backend/config.json";
 interface PersonalityScores {
   introversion: number;
   extraversion: number;
@@ -13,8 +13,6 @@ interface PersonalityScores {
 }
 
 const Quiz = () => {
-  const PORT = import.meta.env.VITE_BACKEND_PORT;
-
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
@@ -58,36 +56,31 @@ const Quiz = () => {
   }, []);
 
   const submitQuizResponse = async (scores: PersonalityScores) => {
-    // Get session ID from localStorage
-    const sessionID = localStorage.getItem('sessionId'); // Double check this
-    // console.log(sessionID, scores.extraversion, scores.introversion, scores.organized, scores.spontaneous);
-    await fetch(`http://localhost:${PORT}/api/quiz-responses`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(
-        {
+    try {
+      // Get session ID from localStorage
+      const sessionID = localStorage.getItem('sessionId'); // Double check this
+
+      const response = await fetch(`http://localhost:${PORT}/quiz-responses`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
           sessionID: sessionID,
-          PersonalityResults: {
-            E: scores.extraversion,
-            I: scores.introversion,
-            O: scores.organized,
-            S: scores.spontaneous,
-            R: scores.riskTaker,
-            C: scores.cautious
-          }
+          E: scores.extraversion,
+          I: scores.introversion,
+          O: scores.organized,
+          S: scores.spontaneous,
+          R: scores.riskTaker,
+          C: scores.cautious,
         }),
-    }).then(response => response.json())
-      .then(data => {
-        console.log('', data);
-        alert(`this is your '${data}'`);
-      })
-      .catch(error => {
-        console.error('Error submitting response:', error);
-        console.error('GET request failed:', error);
       });
-  }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error submitting response:', error);
+    }
+  };
 
   const updatePersonalityScores = (question: Question, value: number) => {
     if (question.type === "scale" && question.traits) {
