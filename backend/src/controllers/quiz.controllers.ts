@@ -2,18 +2,55 @@
 import { Request, Response } from "express";
 import * as userService from "../services/user.services";
 import { } from "../constants/types";
+import { usersCollection, quizPersonalityResultsCollection } from "../db";
 
 async function calculateUserPreferences(req: Request, res: Response) {
   try { // calculate *pref* variable
     // userResultsCollection = [{userID: x, Introversion: x, Extraversion: x, etc. }, {}, {}, {}]
-    // you'll need to separate the sets based off their gender, no route for that yet though.
-    // so just pretend you're given 4 people or 6 people & take first half to match w second half for now
-    const users = await userResultsCollection.find().toArray();
 
-    // Split users into two groups (for now, first half matches with second half)
-    const groupA = users.slice(0, Math.floor(users.length / 2));
-    const groupB = users.slice(Math.floor(users.length / 2));
-    const N = groupA.length;
+    const users = await usersCollection.find().toArray();
+    const quizResults = await quizPersonalityResultsCollection.find().toArray();
+
+    // join the user data (e.g. name, gender) with their personality results (e.g. introversion, extraversion)
+    // from the quiz
+    const usersWithPersonality = users.map(user => {
+      // Find the corresponding quiz result for this user
+      const personalityData = quizResults.find(result => result.sessionID === user.userId);
+      
+      if (!personalityData || !personalityData.personalityResults) {
+        console.warn(`No personality data found for user ${user.userId}`);
+        return null; // Skip users without personality data
+      }
+
+      // Extract personality scores from the nested personalityResults object
+      const scores = personalityData.personalityResults;
+
+      // Combine user info with personality scores
+      return {
+        userId: user.userId,
+        name: user.name,
+        gender: user.gender,
+        email: user.email,
+        // Personality traits from quiz results (using the letter keys from your data)
+        introversion: scores.I || 0,        // I = Introversion
+        extraversion: scores.E || 0,        // E = Extraversion  
+        spontaneous: scores.S || 0,         // S = Spontaneous
+        organized: scores.O || 0,           // O = Organized
+        riskTaker: scores.R || 0,           // R = Risk Taker
+        cautious: scores.C || 0             // C = Cautious
+      };
+    }).filter(user => user !== null); // Remove users without personality data
+
+    // TODO: check whether enough users to perform matching (usersWithPersonality)
+
+    // Split Users by gender
+    const males = usersWithPersonality.filter(user => user.gender === "male");
+    const females = usersWithPersonality.filter(user => user.gender === "female");
+
+    // Use smaller group size for even matching
+    const N = Math.min(males.length, females.length);
+    const groupA = males.slice(0, N);  // Males
+    const groupB = females.slice(0, N); // Females
 
     let pref: number[][] = []; // preference matrix // [[][]]
 
@@ -57,13 +94,13 @@ async function calculateUserPreferences(req: Request, res: Response) {
     // Convert results back to meaningful user IDs
     const finalMatches = matches.map((manIndex, womanIndex) => {
       return {
-        person1: groupB[womanIndex].userID, // Woman from groupB
-        person2: groupA[manIndex].userID,   // Man from groupA
+        person1: groupB[womanIndex].userId, // Woman from groupB
+        person2: groupA[manIndex].userId,   // Man from groupA
         compatibility: calculateCompatibility(groupB[womanIndex], groupA[manIndex])
       };
     });
 
-    const res = finalMatches;
+    res.json(finalMatches);
   } catch (err) {
     res.status(400).json({ error: err.message });
   }
