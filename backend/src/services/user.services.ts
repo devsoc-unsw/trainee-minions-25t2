@@ -10,6 +10,8 @@ import {
     UserId,
     User,
     SessionId,
+    Gender,
+    Sexuality,
 } from "../constants/types";
 import { v4 as uuidv4 } from "uuid";
 import { sessionsCollection, usersCollection } from "../db";
@@ -72,7 +74,9 @@ function isValidPassword(password: Password): string | boolean {
   export async function authRegister(
     name: Name,
     email: Email,
-    password: Password
+    password: Password,
+    gender: Gender,
+    sexuality: Sexuality
   ): Promise<Session> {
     if (isValidName(name) !== true) {
       throw new Error(isValidName(name) as string);
@@ -98,6 +102,8 @@ function isValidPassword(password: Password): string | boolean {
       email: email,
       password: password,
       userId: session.userId,
+      gender: gender,
+      sexuality: sexuality
     };
   
     await sessionsCollection.insertOne(session);

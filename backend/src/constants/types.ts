@@ -6,7 +6,8 @@ export type Name = string;
 export type UserId = string;
 export type Email = string; 
 export type Password = string; 
-
+export type Gender = string;
+export type Sexuality = string;
 
 export type Session = {
   // _id: ObjectId,
@@ -20,6 +21,8 @@ export type User = {
   email: Email;
   password: Password;
   userId: UserId;
+  gender: Gender
+  sexuality: Sexuality
 };
 
 // types for dataStore
