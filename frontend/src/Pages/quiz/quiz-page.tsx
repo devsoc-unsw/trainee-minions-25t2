@@ -13,6 +13,8 @@ interface PersonalityScores {
 }
 
 const Quiz = () => {
+  const PORT = import.meta.env.VITE_BACKEND_PORT;
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
@@ -37,8 +39,8 @@ const Quiz = () => {
     const shuffledScale = [...scaleQuestions].sort(() => Math.random() - 0.5);
 
     // Select first 8 and 12 questions
-    const selectedOpen = shuffledOpen.slice(0, 8);
-    const selectedScale = shuffledScale.slice(0, 12);
+    const selectedOpen = shuffledOpen.slice(0, 0);
+    const selectedScale = shuffledScale.slice(0, 1);
 
     // Combine and shuffle all selected questions
     const allSelected = [...selectedOpen, ...selectedScale].sort(
@@ -55,34 +57,37 @@ const Quiz = () => {
     return () => clearTimeout(timer);
   }, []);
 
-const submitQuizResponse = async (scores: PersonalityScores) => {
-  try {
+  const submitQuizResponse = async (scores: PersonalityScores) => {
     // Get session ID from localStorage
     const sessionID = localStorage.getItem('sessionId'); // Double check this
-    
-    const response = await fetch('/api/quiz-responses', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      sessionID: sessionID,
-      PersonalityResults: {
-        E: scores.extraversion,
-        I: scores.introversion,
-        O: scores.organized,
-        S: scores.spontaneous,
-        R: scores.riskTaker,
-        C: scores.cautious
-      }
-    }),
-  });
-
-    return await response.json();
-  } catch (error) {
-    console.error('Error submitting response:', error);
+    // console.log(sessionID, scores.extraversion, scores.introversion, scores.organized, scores.spontaneous);
+    await fetch(`http://localhost:${PORT}/api/quiz-responses`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(
+        {
+          sessionID: sessionID,
+          PersonalityResults: {
+            E: scores.extraversion,
+            I: scores.introversion,
+            O: scores.organized,
+            S: scores.spontaneous,
+            R: scores.riskTaker,
+            C: scores.cautious
+          }
+        }),
+    }).then(response => response.json())
+      .then(data => {
+        console.log('', data);
+        alert(`this is your '${data}'`);
+      })
+      .catch(error => {
+        console.error('Error submitting response:', error);
+        console.error('GET request failed:', error);
+      });
   }
-};
 
   const updatePersonalityScores = (question: Question, value: number) => {
     if (question.type === "scale" && question.traits) {
@@ -181,11 +186,10 @@ const submitQuizResponse = async (scores: PersonalityScores) => {
                       <button
                         key={value}
                         onClick={() => setScaleValue(value)}
-                        className={`h-12 w-12 rounded-full border-2 transition-all duration-200 ${
-                          scaleValue === value
-                            ? "border-blue-500 bg-blue-500 text-white"
-                            : "border-gray-300 text-gray-500 hover:border-blue-300"
-                        }`}
+                        className={`h-12 w-12 rounded-full border-2 transition-all duration-200 ${scaleValue === value
+                          ? "border-blue-500 bg-blue-500 text-white"
+                          : "border-gray-300 text-gray-500 hover:border-blue-300"
+                          }`}
                       >
                         {value}
                       </button>
@@ -222,12 +226,12 @@ const submitQuizResponse = async (scores: PersonalityScores) => {
 
                   {/* Back button */}
                   <div className="p-6">
-                      <button 
-                          onClick={() => navigate('/')}
-                          className="px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
-                      >
-                          Back to Events!
-                      </button>
+                    <button
+                      onClick={() => navigate('/')}
+                      className="px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                    >
+                      Back to Events!
+                    </button>
                   </div>
                 </div>
               </div>

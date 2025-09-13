@@ -4,7 +4,7 @@ import { PORT } from "../config.json";
 import { errorMiddleware } from "./middleware";
 import cors from "cors";
 import { connectToDatabase, closeDatabaseConnection } from "./db";
-import userRoutes from "./routes/user.routes"; 
+import userRoutes from "./routes/user.routes";
 
 dotenv.config();
 
