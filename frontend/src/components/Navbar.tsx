@@ -16,6 +16,7 @@ import {
 import Hamburger from "./Hamburger";
 import { useNavigate } from "react-router-dom";
 import axios from "axios"
+import { PORT } from "../../../backend/config.json";
 
 interface SearchFilters {
   events: string;
@@ -110,16 +111,16 @@ const Navbar = ({ onSearch }: NavbarProps) => {
     setLoginIsClicked(false);
   };
 
-  const handleLogout = async () => {
+  const handleLogout = async (e) => {
+    e.preventDefault();
     try {
-      const sessionId = localStorage.getItem("sessionId");
-      await axios.delete("http://localhost:8080/user/logout", {
-        headers: { session: sessionId },
+      await axios.delete(`http://localhost:${PORT}/user/logout`, {
+        headers: {
+          session: localStorage.getItem("sessionId"), 
+        },
       });
-  
       localStorage.removeItem("sessionId");
-      localStorage.removeItem("userData"); 
-  
+      localStorage.removeItem("userData");
       navigate("/");
     } catch(err) {
       console.error("Logout failed: ", err);
