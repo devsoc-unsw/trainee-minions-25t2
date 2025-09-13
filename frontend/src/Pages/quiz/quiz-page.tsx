@@ -3,6 +3,7 @@ import { Sticker, Heart } from "lucide-react";
 import { openQuestions, scaleQuestions, type Question } from "./questions";
 import { useNavigate } from "react-router-dom";
 import { PORT } from "../../../../backend/config.json";
+
 interface PersonalityScores {
   introversion: number;
   extraversion: number;
@@ -37,8 +38,8 @@ const Quiz = () => {
     const shuffledScale = [...scaleQuestions].sort(() => Math.random() - 0.5);
 
     // Select first 8 and 12 questions
-    const selectedOpen = shuffledOpen.slice(0, 0);
-    const selectedScale = shuffledScale.slice(0, 1);
+    const selectedOpen = shuffledOpen.slice(0, 8);
+    const selectedScale = shuffledScale.slice(0, 12);
 
     // Combine and shuffle all selected questions
     const allSelected = [...selectedOpen, ...selectedScale].sort(
@@ -82,54 +83,51 @@ const Quiz = () => {
     }
   };
 
-  const updatePersonalityScores = (question: Question, value: number) => {
+  const calculateUpdatedScores = (question: Question, value: number, currentScores: PersonalityScores): PersonalityScores => {
     if (question.type === "scale" && question.traits) {
-      setPersonalityScores((prev) => {
-        const newScores = { ...prev };
+      // Removed react state (async) which only rendered renders in the next loop (causes backend results to be 1 behind)
+      const newScores = { ...currentScores };
 
-        question.traits?.forEach((trait) => {
-          if (value >= 4) {
-            // High score (4-5) increments the trait
-            newScores[trait as keyof PersonalityScores]++;
-          } else if (value <= 2) {
-            // Low score (1-2) increments opposite trait
-            const oppositeTraits: Record<string, keyof PersonalityScores> = {
-              introversion: "extraversion",
-              extraversion: "introversion",
-              spontaneous: "organized",
-              organized: "spontaneous",
-              riskTaker: "cautious",
-              cautious: "riskTaker",
-            };
+      question.traits.forEach((trait) => {
+        if (value >= 4) {
+          // High score (4-5) increments the trait
+          newScores[trait as keyof PersonalityScores]++;
+        } else if (value <= 2) {
+          // Low score (1-2) increments opposite trait
+          const oppositeTraits: Record<string, keyof PersonalityScores> = {
+            introversion: "extraversion",
+            extraversion: "introversion",
+            spontaneous: "organized",
+            organized: "spontaneous",
+            riskTaker: "cautious",
+            cautious: "riskTaker",
+          };
 
-            const opposite = oppositeTraits[trait];
-            if (opposite) {
-              newScores[opposite]++;
-            }
-          }
-          // Score of 3 is neutral, no increment
-        });
-
-        return newScores;
+          const opposite = oppositeTraits[trait];
+          newScores[opposite]++;
+        }
+        // Score of 3 is neutral, no increment
       });
+
+      return newScores;
     }
+    return currentScores;
   };
 
   const handleNextQuestion = async (): Promise<void> => {
     const currentQuestion = selectedQuestions[currentQuestionIndex];
 
-    // Update personality scores if it's a scale question
-    updatePersonalityScores(currentQuestion, scaleValue);
-
+    // Calculate updated scores immediately
+    const updatedScores = calculateUpdatedScores(currentQuestion, scaleValue, personalityScores);
+    setPersonalityScores(updatedScores);
     setContentVisible(false);
 
-    // Submit quiz is async, update this line
     setTimeout(async () => {
       if (currentQuestionIndex < selectedQuestions.length - 1) {
         setCurrentQuestionIndex((prev) => prev + 1);
       } else {
         setIsCompleted(true);
-        await submitQuizResponse(personalityScores);
+        await submitQuizResponse(updatedScores);
       }
     }, 300);
 
