@@ -10,6 +10,7 @@ export let sessionsCollection: Collection;
 export let usersCollection: Collection;
 export let mailsCollection: Collection;
 export let dataCollection: Collection;
+export let quizPersonalityResultsCollection: Collection;
 
 export async function connectToDatabase() {
   try {
@@ -27,6 +28,7 @@ export async function connectToDatabase() {
 
     sessionsCollection = db.collection("sessions");
     usersCollection = db.collection("users");
+    quizPersonalityResultsCollection = db.collection("quizResults");
 
     // Initialize collections if they don't exist
     const usersCount = await usersCollection.countDocuments();
@@ -42,6 +44,7 @@ export async function connectToDatabase() {
         sessions: [],
       });
     }
+
   } catch (error) {
     console.error("Error found when connecting to MongoDB: ", error);
   }
