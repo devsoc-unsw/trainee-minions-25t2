@@ -33,4 +33,13 @@ async function logout(req: Request, res: Response) {
   }
 }
 
+async function trackQuizResponses(req: Request, res: Response) {
+    try {
+
+    } catch (err) {
+
+    }
+
+}
+
 export { register, login, logout };
