@@ -5,12 +5,41 @@ import image2Svg from "../assets/restaurant_2.jpg";
 import image3Svg from "../assets/rooftop_bar1.jpg";
 import image4Svg from "../assets/rooftop_bar2.jpg";
 import Background from "../components/Background";
+import { useNavigate, useParams } from "react-router-dom";
+// import type { Event } from "../data/EventsData";
+// export interface Event {
+//   id: number;
+//   title: string;
+//   date: string;
+//   venue: string;
+//   price: string;
+//   status: string;
+//   image: any;
+//   location: string;
+//   tags: string[];
+// }
+export interface Event {
+  id: number,
+  title: string,
+  date: string,
+  location: string;
+  price: string,
+  description: string,
+  background: any,
+}
 
 export default function UserEventsGrid() {
   const [isMostRecent, setIsMostRecent] = useState(true);
 
-  const events = [
+  const navigate = useNavigate();
+
+  const navigateToQuiz = (id: string) => {
+    navigate(`/quiz/${id}`);
+  }
+
+  const events: Event[] = [
     {
+      id: Date.now(),
       title: "Singles night at Tavern",
       date: "Mon, 22nd Oct, 6:30pm",
       location: "Barangaroo",
@@ -19,6 +48,7 @@ export default function UserEventsGrid() {
       background: image1Svg
     },
     {
+      id: Date.now(),
       title: "Speed Dating at The Lounge",
       date: "Wed, 24th Oct, 7:00pm",
       location: "Sydney CBD",
@@ -27,6 +57,7 @@ export default function UserEventsGrid() {
       background: image2Svg
     },
     {
+      id: Date.now(),
       title: "Couples Workshop at Parkview",
       date: "Sat, 27th Oct, 2:00pm",
       location: "Parramatta",
@@ -35,6 +66,7 @@ export default function UserEventsGrid() {
       background: image3Svg
     },
     {
+      id: Date.now(),
       title: "Mixer Night at Rooftop",
       date: "Tue, 30th Oct, 6:00pm",
       location: "Circular Quay",
@@ -45,45 +77,45 @@ export default function UserEventsGrid() {
   ];
 
   // Function to parse the date string into a Date object
-  const parseEventDate = (dateString) => {
+  const parseEventDate = (dateString: string) => {
     // Split the date string into parts
     const parts = dateString.split(',');
     const dayPart = parts[1].trim(); // "22nd Oct"
     const timePart = parts[2].trim(); // "6:30pm"
-    
+
     // Extract day, month, and time
     const dayMatch = dayPart.match(/(\d+)(?:st|nd|rd|th)/);
     const monthMatch = dayPart.match(/(Jan|Feb|Mar|Apr|May|Jun|Jul|Aug|Sep|Oct|Nov|Dec)/);
     const timeMatch = timePart.match(/(\d+):(\d+)(am|pm)/);
-    
+
     if (!dayMatch || !monthMatch || !timeMatch) {
       return new Date(0);
     }
-    
+
     const day = parseInt(dayMatch[1]);
     const month = monthMatch[1];
     let hours = parseInt(timeMatch[1]);
     const minutes = parseInt(timeMatch[2]);
     const period = timeMatch[3];
-    
+
     // Convert to 24-hour format
     if (period === 'pm' && hours !== 12) {
       hours += 12;
     } else if (period === 'am' && hours === 12) {
       hours = 0;
     }
-    
+
     // Create a proper date string for parsing
     const currentYear = new Date().getFullYear();
     const monthNames = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
     const monthIndex = monthNames.indexOf(month);
-    
+
     return new Date(currentYear, monthIndex, day, hours, minutes);
   };
 
-  const sortedEvents = [...events].sort((a, b) => {
-    const dateA = parseEventDate(a.date);
-    const dateB = parseEventDate(b.date);
+  const sortedEvents = [...events].sort((a: any, b: any) => {
+    const dateA: any = parseEventDate(a.date);
+    const dateB: any = parseEventDate(b.date);
     return isMostRecent ? dateB - dateA : dateA - dateB;
   });
 
@@ -128,7 +160,7 @@ export default function UserEventsGrid() {
                 <p className="text-md text-gray-600 line-clamp-4 mb-6">{event.description}</p>
                 <div className="flex justify-between text-md text-red-500 font-medium">
                   <a href="https://www.247freepoker.com/" className="underline hover:text-red-700 transition-colors" target="_blank">Visit Our Website</a>
-                  <a href="https://www.247freepoker.com/" className="underline hover:text-red-700 transition-colors" target="_blank">Go to Session</a>
+                  <a onClick={() => { navigateToQuiz(event.id) }} className="underline hover:text-red-700 transition-colors" target="_blank">Go to Session</a>
                 </div>
               </div>
             </div>

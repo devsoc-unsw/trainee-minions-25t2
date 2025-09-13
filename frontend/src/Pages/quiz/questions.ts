@@ -1,3 +1,4 @@
+// TODO: data should be moved to backend / shared folder
 // Merged open and scale question types
 export interface Question {
   id: number;

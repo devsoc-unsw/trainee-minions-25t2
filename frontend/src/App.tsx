@@ -8,6 +8,7 @@ import HeroComponent from "./components/HeroComponent";
 import UserDashboard from "./Pages/user-dashboard";
 import EventDetails from "./components/EventDetails";
 import Quiz from "./Pages/quiz/quiz-page";
+import LoveLinked from "./Pages/LoveLinked";
 
 interface SearchFilters {
   events: string;
@@ -46,7 +47,8 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/user-dashboard" element={<UserDashboard />} />
         <Route path="/event/:id" element={<EventDetails />} />
-        <Route path="/quiz" element={<Quiz />} />
+        <Route path="/quiz/:id" element={<Quiz />} />
+        <Route path="/love-linked/:id" element={<LoveLinked />} /> {/* behind the scenes algorithm */}
       </Routes>
     </BrowserRouter>
   );

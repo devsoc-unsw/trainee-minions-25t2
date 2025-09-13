@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { Sticker, Heart } from "lucide-react";
 import { openQuestions, scaleQuestions, type Question } from "./questions";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface PersonalityScores {
   introversion: number;
@@ -13,6 +13,13 @@ interface PersonalityScores {
 }
 
 const Quiz = () => {
+  const { id } = useParams();
+  const numericId = Number(id);
+
+  useEffect(() => {
+    console.log(numericId);
+  }, [])
+
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [isLoading, setIsLoading] = useState(true);
   const [contentVisible, setContentVisible] = useState(false);
@@ -150,11 +157,10 @@ const Quiz = () => {
                       <button
                         key={value}
                         onClick={() => setScaleValue(value)}
-                        className={`h-12 w-12 rounded-full border-2 transition-all duration-200 ${
-                          scaleValue === value
-                            ? "border-blue-500 bg-blue-500 text-white"
-                            : "border-gray-300 text-gray-500 hover:border-blue-300"
-                        }`}
+                        className={`h-12 w-12 rounded-full border-2 transition-all duration-200 ${scaleValue === value
+                          ? "border-blue-500 bg-blue-500 text-white"
+                          : "border-gray-300 text-gray-500 hover:border-blue-300"
+                          }`}
                       >
                         {value}
                       </button>
@@ -190,13 +196,13 @@ const Quiz = () => {
                   </div>
 
                   {/* Back button */}
-                  <div className = "p-6">
-                      <button 
-                          onClick = {() => navigate('/')}
-                          className = "px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
-                      >
-                          Back to Events!
-                      </button>
+                  <div className="p-6">
+                    <button
+                      onClick={() => navigate('/')}
+                      className="px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                    >
+                      Back to Events!
+                    </button>
                   </div>
                 </div>
               </div>
