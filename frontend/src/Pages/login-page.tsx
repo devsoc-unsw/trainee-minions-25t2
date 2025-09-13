@@ -223,7 +223,7 @@ export default function LoginPage() {
                 </option>
                 <option value="straight">Straight</option>
                 <option value="bisexual">Bisexual / Pansexual</option>
-                <option value="gay">Gay / Lesbain</option>
+                <option value="gay">Gay / Lesbian</option>
                 <option value="other">Other</option>
               </select>
 
