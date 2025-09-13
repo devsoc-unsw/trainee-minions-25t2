@@ -14,6 +14,7 @@ import {
 import { v4 as uuidv4 } from "uuid";
 import { sessionsCollection, usersCollection } from "../db";
 import { ObjectId } from "mongodb";
+import bcrypt from "bcrypt";
 
 function isValidName(name: Name): string | boolean {
     if (name.length > 100) {
@@ -85,6 +86,8 @@ function isValidPassword(password: Password): string | boolean {
       throw new Error(isValidPassword(password) as string);
     }
 
+    const hashedPassword = await bcrypt.hash(password, 10);
+
     const session: Session = {
       sessionId: uuidv4(),
       userId: uuidv4(),
@@ -93,7 +96,7 @@ function isValidPassword(password: Password): string | boolean {
     const user: User = {
       name: name,
       email: email,
-      password: password,
+      password: hashedPassword,
       userId: session.userId,
     };
   
@@ -114,6 +117,11 @@ function isValidPassword(password: Password): string | boolean {
       throw new Error(
         `${ErrorMap["EMAIL_DOES_NOT_EXIST"]} or ${ErrorMap["PASSWORD_INCORRECT"]}`
       );
+    }
+
+    const isMatch = await bcrypt.compare(password, user.password);
+    if (!isMatch) {
+        throw new Error(`${ErrorMap["PASSWORD_INCORRECT"]}`);
     }
   
     const session: Session = {
