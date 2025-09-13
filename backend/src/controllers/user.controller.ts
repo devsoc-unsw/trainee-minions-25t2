@@ -29,4 +29,13 @@ async function logout(req: Request, res: Response) {
     }
 }
 
-export {register, login, logout};
+async function trackQuizResponses(req: Request, res: Response) {
+    try {
+
+    } catch (err) {
+
+    }
+
+}
+
+export { register, login, logout };
