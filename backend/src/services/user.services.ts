@@ -86,7 +86,7 @@ function isValidPassword(password: Password): string | boolean {
       throw new Error(isValidPassword(password) as string);
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    // const hashedPassword = await bcrypt.hash(password, 10);
 
     const session: Session = {
       sessionId: uuidv4(),
@@ -96,7 +96,7 @@ function isValidPassword(password: Password): string | boolean {
     const user: User = {
       name: name,
       email: email,
-      password: hashedPassword,
+      password: password,
       userId: session.userId,
     };
   
@@ -119,10 +119,10 @@ function isValidPassword(password: Password): string | boolean {
       );
     }
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-        throw new Error(`${ErrorMap["PASSWORD_INCORRECT"]}`);
-    }
+    // const isMatch = await bcrypt.compare(password, user.password);
+    // if (!isMatch) {
+    //     throw new Error(`${ErrorMap["PASSWORD_INCORRECT"]}`);
+    // }
   
     const session: Session = {
       sessionId: uuidv4(),
