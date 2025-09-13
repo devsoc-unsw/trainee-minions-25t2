@@ -61,7 +61,7 @@ export default function LoginPage() {
     try {
       const response = await axios.post(
         `http://localhost:${PORT}/user/register`,
-        { username: username, email: email, password: password, sexuality: sexuality, gender: gender }
+        { username: username, email: email, password: password, gender: gender, sexuality: sexuality }
       );
       localStorage.setItem("sessionId", response.data.sessionId);
       const data = {
@@ -137,7 +137,7 @@ export default function LoginPage() {
         </div>
 
         {/* Login/Signup Form */}
-        <div className="space-y-4 h-[300px]">
+        <div className="space-y-4 h-[500px]">
           {/* Error Message */}
           {errorMessage && (
             <div className="p-3 rounded-lg bg-red-50 border border-red-200">
