@@ -186,4 +186,22 @@ function stableMatching(prefer: number[][]): number[] {
   }
   return wPartner;  
 }
-export { calculateUserPreferences };
+
+async function getBestMatch(req: Request, res: Response) {
+  try {
+    const { name } = req.params;
+
+    const users = await usersCollection.find().toArray();
+    
+
+    res.json({
+      personA: personA.name,
+      bestMatch: bestMatch?.name,
+      compatibility: bestScore,
+    });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+export { calculateUserPreferences, getBestMatch };
