@@ -9,6 +9,7 @@ import UserDashboard from "./Pages/user-dashboard";
 import EventDetails from "./components/EventDetails";
 import Quiz from "./Pages/quiz/quiz-page";
 import CompatibilityResults from "./Pages/compatibility-results";
+import LoveLinked from "./Pages/love-linked";
 
 interface SearchFilters {
   events: string;
@@ -49,6 +50,7 @@ function App() {
         <Route path="/event/:id" element={<EventDetails />} />
         <Route path="/quiz" element={<Quiz />} />
         <Route path="/results" element={<CompatibilityResults />} />
+        <Route path="/love-linked" element={<LoveLinked />} />
       </Routes>
     </BrowserRouter>
   );

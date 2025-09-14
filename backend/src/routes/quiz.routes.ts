@@ -4,7 +4,8 @@ import { calculateUserPreferences, getBestMatch } from "../controllers/quiz.cont
 
 const router = express.Router();
 
-router.get('/', calculateUserPreferences);
+router.get('/results', calculateUserPreferences); // backend calculation
+// router.get('/results', collectCompatibilityResults);
 router.get("/quiz/best-match/:name", getBestMatch);
 
 export default router;
