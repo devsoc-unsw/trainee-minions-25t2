@@ -10,9 +10,16 @@ export default function LoveLinked() {
     ]
   });
 
+  // person1
+  // "trial1"
+  // person2
+  // "trial2"
+  // compatibility
+  // 0
+
   const getUserPreferences = async () => {
     console.log('awaiting data');
-    await fetch(`http://localhost:${PORT}/api/compatibility/results`, {
+    await fetch(`http://localhost:${PORT}/api/compatibility/final-result`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

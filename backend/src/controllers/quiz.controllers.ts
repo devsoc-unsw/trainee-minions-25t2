@@ -4,9 +4,15 @@ import * as userService from "../services/user.services";
 import { } from "../constants/types";
 import { usersCollection, userQuizResponsesCollection, quizCompatibilityCollection, sessionsCollection } from "../db";
 
-// async function collectCompatibilityResults(req: Request, res: Response) {
+async function collectCompatibilityResults(req: Request, res: Response) {
+  const documents = await quizCompatibilityCollection.find().toArray();
+  const demoQuizResults = documents.find((dict) => dict.id === 'DEMO') // only displaying DEMO For DEMO
+  console.log('the documents: ', documents);
+  console.log('the results: ', demoQuizResults);
+  // res.json(documents[0]); // get req.
+  res.json(demoQuizResults); // directly from database!
 
-// }
+}
 
 async function getUserCompatibilityResults() {
   // TODO: based off the userSession ID <- this should display correctly
@@ -241,4 +247,24 @@ function stableMatching(prefer: number[][]): number[] {
   }
   return wPartner;
 }
-export { calculateUserPreferences };
+
+async function getBestMatch(req: Request, res: Response) {
+  try {
+    const { name } = req.params;
+
+    const result = await quizCompatibilityCollection.find().toArray();
+    console.log(result);
+
+    // const matrix = result.result;
+
+    // res.json({
+    //   personA: personA.name,
+    //   bestMatch: bestMatch?.name,
+    //   compatibility: bestScore,
+    // });
+  } catch (err: any) {
+    res.status(400).json({ error: err.message });
+  }
+}
+
+export { calculateUserPreferences, getBestMatch, collectCompatibilityResults };
