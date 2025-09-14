@@ -26,7 +26,7 @@ async function startServer() {
     app.use(express.json());
     app.use(cors());
     app.use(userRoutes);
-    app.use('/api', quizRoutes);
+    app.use('/api/compatibility', quizRoutes);
     app.use(errorMiddleware);
   } catch (error) {
     console.error("Error starting the server:", error);

@@ -38,8 +38,8 @@ const Quiz = () => {
     const shuffledScale = [...scaleQuestions].sort(() => Math.random() - 0.5);
 
     // Select first 8 and 12 questions
-    const selectedOpen = shuffledOpen.slice(0, 8);
-    const selectedScale = shuffledScale.slice(0, 12);
+    const selectedOpen = shuffledOpen.slice(0, 0); //TODO
+    const selectedScale = shuffledScale.slice(0, 2); // TODO
 
     // Combine and shuffle all selected questions
     const allSelected = [...selectedOpen, ...selectedScale].sort(
