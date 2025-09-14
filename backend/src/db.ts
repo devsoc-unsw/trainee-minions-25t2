@@ -10,8 +10,8 @@ export let sessionsCollection: Collection;
 export let usersCollection: Collection;
 export let mailsCollection: Collection;
 export let dataCollection: Collection;
-export let quizPersonalityResultsCollection: Collection;
-export let userQuizResponsesCollection: Collection;
+export let userQuizResponsesCollection: Collection; // louis
+export let quizCompatibilityCollection: Collection; // christian
 
 export async function connectToDatabase() {
   try {
@@ -30,29 +30,29 @@ export async function connectToDatabase() {
     sessionsCollection = db.collection("sessions");
     usersCollection = db.collection("users");
     userQuizResponsesCollection = db.collection("userQuizResponses");
-    quizPersonalityResultsCollection = db.collection("quizResults");
+    quizCompatibilityCollection = db.collection("quizCompatibilityResults");
 
-    // Initialize collections if they don't exist
-    const usersCount = await usersCollection.countDocuments();
-    if (usersCount === 0) {
-      await usersCollection.insertOne({
-        users: [],
-      });
-    }
+    // // Initialize collections if they don't exist
+    // const usersCount = await usersCollection.countDocuments();
+    // if (usersCount === 0) {
+    //   await usersCollection.insertOne({
+    //     users: [],
+    //   });
+    // }
 
-    const sessionsCount = await sessionsCollection.countDocuments();
-    if (sessionsCount === 0) {
-      await sessionsCollection.insertOne({
-        sessions: [],
-      });
-    }
+    // const sessionsCount = await sessionsCollection.countDocuments();
+    // if (sessionsCount === 0) {
+    //   await sessionsCollection.insertOne({
+    //     sessions: [],
+    //   });
+    // }
 
-    const quizCount = await userQuizResponsesCollection.countDocuments();
-    if (quizCount === 0) {
-      await userQuizResponsesCollection.insertOne({
-        quizResponses: [],
-      });
-    }
+    // const quizCount = await userQuizResponsesCollection.countDocuments();
+    // if (quizCount === 0) {
+    //   await userQuizResponsesCollection.insertOne({
+    //     quizResponses: [],
+    //   });
+    // }
   } catch (error) {
     console.error("Error found when connecting to MongoDB: ", error);
   }

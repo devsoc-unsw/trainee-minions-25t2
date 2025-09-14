@@ -4,6 +4,7 @@ import { calculateUserPreferences } from "../controllers/quiz.controllers";
 
 const router = express.Router();
 
-router.get('/', calculateUserPreferences);
+router.get('/results', calculateUserPreferences); // backend calculation
+// router.get('/results', collectCompatibilityResults);
 
 export default router;
