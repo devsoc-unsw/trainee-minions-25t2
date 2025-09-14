@@ -4,6 +4,20 @@ import * as userService from "../services/user.services";
 import { } from "../constants/types";
 import { quizCollection } from "../db";
 
+async function collectCompatibilityResults(req: Request, res: Response) {
+  await calculateUserPreferences(req, res);
+  const documents = await quizCollection.find().toArray();
+
+  const demoQuizResults = documents.find((dict) => dict.id === 'DEMO') // only displaying DEMO For DEMO
+  console.log(documents);
+  console.log(demoQuizResults);
+  res.json(demoQuizResults); // directly from database!
+}
+
+async function getUserCompatibilityResults() {
+  // TODO: based off the userSession ID <- this should display correctly
+}
+
 async function calculateUserPreferences(req: Request, res: Response) {
   try { // calculate *pref* variable
     // userResultsCollection = [{userID: x, Introversion: x, Extraversion: x, etc. }, {}, {}, {}]
@@ -107,11 +121,11 @@ async function calculateUserPreferences(req: Request, res: Response) {
 
     const res = finalMatches;
     quizCollection.insertOne({
-      id: 1,
+      id: 'DEMO', // FOR DEMO PURPOSES
       result: res,
     }); // new item inserted into db through backend
 
-    console.log(res);
+    console.log(res, 'this is my res and it should have been pushed to quizCollection');
 
   } catch (err) {
     res.status(400).json({ error: err.message });
@@ -198,4 +212,4 @@ function stableMatching(prefer: number[][]): number[] {
   }
   return wPartner;
 }
-export { calculateUserPreferences };
+export { calculateUserPreferences, collectCompatibilityResults, getUserCompatibilityResults };

@@ -9,30 +9,6 @@ const CompatibilityResults = () => {
     // replace this with real quiz result data
     const [bestMatchName, setBestMatchName] = useState("Alex Johnson");
 
-    const calculateUserPreferences = async () => {
-        await fetch(`http://localhost:${PORT}/api/results/`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        })
-            .then(response => response.json()) // Parse the JSON response
-            .then(data => {
-                console.log('GET request successful:', data);
-                // Process the retrieved data
-                setBestMatchName(data);
-            })
-            .catch(error => {
-                console.error('GET request failed:', error);
-            });
-    }
-
-    useEffect(() => {
-        console.log(PORT, 'backend port');
-        calculateUserPreferences();
-        console.log(bestMatchName);
-    }, [setBestMatchName])
-
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-5">
             {/* Back button */}
