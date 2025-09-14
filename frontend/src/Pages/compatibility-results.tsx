@@ -50,7 +50,7 @@ const CompatibilityResults = () => {
 
                 // figure out the best match from result collected
 
-                const userName = localStorage.getItem('userName');
+                const userName = localStorage.getItem('userName')?.toLowerCase();
 
                 // console.log('username is this: ', userName);
 
