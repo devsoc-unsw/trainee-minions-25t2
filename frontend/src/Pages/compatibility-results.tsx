@@ -1,10 +1,33 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const CompatibilityResults = () => {
     const navigate = useNavigate();
+    const [bestMatchName, setBestMatchName] = useState<string>("Loading...");
 
-    // replace this with real quiz result data
-    const bestMatchName = "Alex Johnson";
+    useEffect(() => {
+        const fetchBestMatch = async () => {
+            try {
+                const sessionId = localStorage.getItem("sessionId");
+                if (!sessionId) {
+                    setBestMatchName("No session found");
+                    return;
+                }
+
+                const res = await fetch(`http://localhost:${5173}/quiz-results/${sessionId}`);
+                const data = await res.json();
+
+                if (data.bestMatchName) {
+                    setBestMatchName(data.bestMatchName);
+                }
+            } catch (err) {
+                console.error(err);
+                setBestMatchName("Error fetching match");
+            }
+        };
+
+        fetchBestMatch();
+    }, []);
 
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-5">
