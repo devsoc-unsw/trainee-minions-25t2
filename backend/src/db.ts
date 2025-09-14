@@ -11,6 +11,7 @@ export let usersCollection: Collection;
 export let mailsCollection: Collection;
 export let dataCollection: Collection;
 export let quizPersonalityResultsCollection: Collection;
+export let userQuizResponsesCollection: Collection;
 
 export async function connectToDatabase() {
   try {
@@ -28,6 +29,7 @@ export async function connectToDatabase() {
 
     sessionsCollection = db.collection("sessions");
     usersCollection = db.collection("users");
+    userQuizResponsesCollection = db.collection("userQuizResponses");
     quizPersonalityResultsCollection = db.collection("quizResults");
 
     // Initialize collections if they don't exist
@@ -45,6 +47,12 @@ export async function connectToDatabase() {
       });
     }
 
+    const quizCount = await userQuizResponsesCollection.countDocuments();
+    if (quizCount === 0) {
+      await userQuizResponsesCollection.insertOne({
+        quizResponses: [],
+      });
+    }
   } catch (error) {
     console.error("Error found when connecting to MongoDB: ", error);
   }
