@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Sticker, Heart } from "lucide-react";
 import { openQuestions, scaleQuestions, type Question } from "./questions";
 import { useNavigate } from "react-router-dom";
+import { PORT } from "../../../../backend/config.json";
 
 interface PersonalityScores {
   introversion: number;
@@ -55,52 +56,78 @@ const Quiz = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  const updatePersonalityScores = (question: Question, value: number) => {
-    if (question.type === "scale" && question.traits) {
-      setPersonalityScores((prev) => {
-        const newScores = { ...prev };
+  const submitQuizResponse = async (scores: PersonalityScores) => {
+    try {
+      // Get session ID from localStorage
+      const sessionID = localStorage.getItem('sessionId'); // Double check this
 
-        question.traits?.forEach((trait) => {
-          if (value >= 4) {
-            // High score (4-5) increments the trait
-            newScores[trait as keyof PersonalityScores]++;
-          } else if (value <= 2) {
-            // Low score (1-2) increments opposite trait
-            const oppositeTraits: Record<string, keyof PersonalityScores> = {
-              introversion: "extraversion",
-              extraversion: "introversion",
-              spontaneous: "organized",
-              organized: "spontaneous",
-              riskTaker: "cautious",
-              cautious: "riskTaker",
-            };
-
-            const opposite = oppositeTraits[trait];
-            if (opposite) {
-              newScores[opposite]++;
-            }
-          }
-          // Score of 3 is neutral, no increment
-        });
-
-        return newScores;
+      const response = await fetch(`http://localhost:${PORT}/quiz-responses`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          sessionID: sessionID,
+          E: scores.extraversion,
+          I: scores.introversion,
+          O: scores.organized,
+          S: scores.spontaneous,
+          R: scores.riskTaker,
+          C: scores.cautious,
+        }),
       });
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error submitting response:', error);
     }
   };
 
-  const handleNextQuestion = (): void => {
+  const calculateUpdatedScores = (question: Question, value: number, currentScores: PersonalityScores): PersonalityScores => {
+    if (question.type === "scale" && question.traits) {
+      // Removed react state (async) which only rendered renders in the next loop (causes backend results to be 1 behind)
+      const newScores = { ...currentScores };
+
+      question.traits.forEach((trait) => {
+        if (value >= 4) {
+          // High score (4-5) increments the trait
+          newScores[trait as keyof PersonalityScores]++;
+        } else if (value <= 2) {
+          // Low score (1-2) increments opposite trait
+          const oppositeTraits: Record<string, keyof PersonalityScores> = {
+            introversion: "extraversion",
+            extraversion: "introversion",
+            spontaneous: "organized",
+            organized: "spontaneous",
+            riskTaker: "cautious",
+            cautious: "riskTaker",
+          };
+
+          const opposite = oppositeTraits[trait];
+          newScores[opposite]++;
+        }
+        // Score of 3 is neutral, no increment
+      });
+
+      return newScores;
+    }
+    return currentScores;
+  };
+
+  const handleNextQuestion = async (): Promise<void> => {
     const currentQuestion = selectedQuestions[currentQuestionIndex];
 
-    // Update personality scores if it's a scale question
-    updatePersonalityScores(currentQuestion, scaleValue);
-
+    // Calculate updated scores immediately
+    const updatedScores = calculateUpdatedScores(currentQuestion, scaleValue, personalityScores);
+    setPersonalityScores(updatedScores);
     setContentVisible(false);
 
-    setTimeout(() => {
+    setTimeout(async () => {
       if (currentQuestionIndex < selectedQuestions.length - 1) {
         setCurrentQuestionIndex((prev) => prev + 1);
       } else {
         setIsCompleted(true);
+        await submitQuizResponse(updatedScores);
       }
     }, 300);
 
@@ -150,11 +177,10 @@ const Quiz = () => {
                       <button
                         key={value}
                         onClick={() => setScaleValue(value)}
-                        className={`h-12 w-12 rounded-full border-2 transition-all duration-200 ${
-                          scaleValue === value
-                            ? "border-blue-500 bg-blue-500 text-white"
-                            : "border-gray-300 text-gray-500 hover:border-blue-300"
-                        }`}
+                        className={`h-12 w-12 rounded-full border-2 transition-all duration-200 ${scaleValue === value
+                          ? "border-blue-500 bg-blue-500 text-white"
+                          : "border-gray-300 text-gray-500 hover:border-blue-300"
+                          }`}
                       >
                         {value}
                       </button>
@@ -190,20 +216,20 @@ const Quiz = () => {
                   </div>
 
                   {/* Back button */}
-                  <div className = "p-6">
-                      <button 
-                        onClick = {() => navigate('/')}
-                        className = "px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
-                      >
-                        Back to Events!
-                      </button>
+                  <div className="p-6">
+                    <button
+                      onClick={() => navigate('/')}
+                      className="px-6 py-4 bg-orange-600 text-white rounded-lg hover:bg-orange-700"
+                    >
+                      Back to Events!
+                    </button>
                   </div>
 
                   {/* See Results Button */}
-                  <div className = "p-6">
+                  <div className="p-6">
                     <button
-                      onClick = {() => navigate('/results')}
-                      className = "px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                      onClick={() => navigate('/results')}
+                      className="px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700"
                     >
                       See Your Results!
                     </button>

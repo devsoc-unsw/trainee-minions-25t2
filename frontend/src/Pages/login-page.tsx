@@ -19,12 +19,12 @@ export default function LoginPage() {
 
   const navigate = useNavigate();
 
-    useEffect(() => {
-      if (localStorage.getItem("sessionId")) {
-        // alert("User is already logged in.");
-        navigate("/user-dashboard");
-      }
-    }, []);
+  useEffect(() => {
+    if (localStorage.getItem("sessionId")) {
+      // alert("User is already logged in.");
+      navigate("/user-dashboard");
+    }
+  }, []);
 
 
   const handleEmailLogin = async (e) => {
@@ -48,7 +48,7 @@ export default function LoginPage() {
     } catch (err) {
       console.error(err);
     }
-    
+
     // Simulate failed login for demonstration
     // setErrorMessage("Account not found. Please check your credentials or sign up for a new account.");
   };
@@ -57,7 +57,7 @@ export default function LoginPage() {
     e.preventDefault();
     console.log("Signup attempted with:", { username, email, password });
     setErrorMessage("");
-    
+
     try {
       const response = await axios.post(
         `http://localhost:${PORT}/user/register`,
@@ -87,9 +87,9 @@ export default function LoginPage() {
     setPassword("");
     setUsername("");
   };
-  
+
   return (
-    <div 
+    <div
       className="flex min-h-screen w-full items-center justify-center bg-cover bg-center"
       style={{ backgroundImage: `url(${backgroundSvg})` }}
     >
@@ -100,7 +100,7 @@ export default function LoginPage() {
             className="rotate-20 cursor-pointer duration-300 hover:rotate-0 hover:animate-pulse transition-all"
             onClick={toggleHeart}
           >
-            <Heart 
+            <Heart
               className={`w-6 h-6 ${isClicked ? 'fill-red-500 text-red-500' : 'text-red-500'}`}
             />
           </button>
@@ -110,25 +110,23 @@ export default function LoginPage() {
         {/* Login Form Header */}
         <div className="text-center mb-6">
           <h1 className="text-2xl font-bold text-gray-800 mb-4">Welcome!</h1>
-          
+
           {/* Tab Navigation */}
           <div className="flex rounded-lg bg-gray-100 p-1">
             <button
-              className={`flex-1 rounded-md py-2 px-4 text-sm font-medium transition-colors ${
-                activeTab === "login"
-                  ? "bg-red-600 text-white shadow-sm"
-                  : "text-gray-600 hover:text-gray-800"
-              }`}
+              className={`flex-1 rounded-md py-2 px-4 text-sm font-medium transition-colors ${activeTab === "login"
+                ? "bg-red-600 text-white shadow-sm"
+                : "text-gray-600 hover:text-gray-800"
+                }`}
               onClick={() => handleTabSwitch("login")}
             >
               Login
             </button>
             <button
-              className={`flex-1 rounded-md py-2 px-4 text-sm font-medium transition-colors ${
-                activeTab === "signup"
-                  ? "bg-red-600 text-white shadow-sm"
-                  : "text-gray-600 hover:text-gray-800"
-              }`}
+              className={`flex-1 rounded-md py-2 px-4 text-sm font-medium transition-colors ${activeTab === "signup"
+                ? "bg-red-600 text-white shadow-sm"
+                : "text-gray-600 hover:text-gray-800"
+                }`}
               onClick={() => handleTabSwitch("signup")}
             >
               Signup
@@ -157,7 +155,7 @@ export default function LoginPage() {
               />
             </div>
           )}
-          
+
           <div>
             <input
               type="email"
@@ -168,7 +166,7 @@ export default function LoginPage() {
               required
             />
           </div>
-          
+
           <div>
             <input
               type="password"
