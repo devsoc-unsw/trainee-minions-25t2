@@ -10,6 +10,28 @@ const CompatibilityResults = () => {
     //     { person1: 'NA', person2: 'NA', compatibility: -1 }
     // ]);
 
+    const calculatePreferences = async () => {
+        await fetch(`http://localhost:${PORT}/api/compatibility/results`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        })
+            .then(response => response.json()) // Parse the JSON response
+            .then(data => {
+                console.log('GET request successful:', data);
+                // Process the retrieved data
+
+                // setData(data.result);
+                // console.log('got: ', data.result);
+
+                // figure out the best match from result collected
+            })
+            .catch(error => {
+                console.error('GET request failed:', error);
+            });
+    }
+
     const getUserPreferences = async () => {
         console.log('awaiting data');
         await fetch(`http://localhost:${PORT}/api/compatibility/final-result`, {
@@ -52,6 +74,7 @@ const CompatibilityResults = () => {
     }
 
     useEffect(() => {
+        calculatePreferences();
         getUserPreferences();
         // const fetchBestMatch = async () => {
         //     try {
