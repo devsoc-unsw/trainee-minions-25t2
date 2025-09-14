@@ -10,7 +10,8 @@ export let sessionsCollection: Collection;
 export let usersCollection: Collection;
 export let mailsCollection: Collection;
 export let dataCollection: Collection;
-export let userQuizResponsesCollection: Collection; 
+export let quizPersonalityResultsCollection: Collection;
+export let userQuizResponsesCollection: Collection;
 
 export async function connectToDatabase() {
   try {
@@ -28,7 +29,8 @@ export async function connectToDatabase() {
 
     sessionsCollection = db.collection("sessions");
     usersCollection = db.collection("users");
-    userQuizResponsesCollection = db.collection("userQuizResponses"); 
+    userQuizResponsesCollection = db.collection("userQuizResponses");
+    quizPersonalityResultsCollection = db.collection("quizResults");
 
     // Initialize collections if they don't exist
     const usersCount = await usersCollection.countDocuments();

@@ -5,6 +5,7 @@ import { errorMiddleware } from "./middleware";
 import cors from "cors";
 import { connectToDatabase, closeDatabaseConnection } from "./db";
 import userRoutes from "./routes/user.routes";
+import quizRoutes from "./routes/quiz.routes";
 
 dotenv.config();
 
@@ -25,6 +26,7 @@ async function startServer() {
     app.use(express.json());
     app.use(cors());
     app.use(userRoutes);
+    app.use(quizRoutes);
     app.use(errorMiddleware);
   } catch (error) {
     console.error("Error starting the server:", error);

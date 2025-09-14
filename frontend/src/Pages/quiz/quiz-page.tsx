@@ -224,6 +224,16 @@ const Quiz = () => {
                       Back to Events!
                     </button>
                   </div>
+
+                  {/* See Results Button */}
+                  <div className="p-6">
+                    <button
+                      onClick={() => navigate('/results')}
+                      className="px-6 py-4 bg-green-600 text-white rounded-lg hover:bg-green-700"
+                    >
+                      See Your Results!
+                    </button>
+                  </div>
                 </div>
               </div>
             </>
