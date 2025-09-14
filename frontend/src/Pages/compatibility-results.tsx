@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { PORT } from '../../../backend/config.json';
 
 const CompatibilityResults = () => {
     const navigate = useNavigate();
@@ -8,13 +9,13 @@ const CompatibilityResults = () => {
     useEffect(() => {
         const fetchBestMatch = async () => {
             try {
-                const sessionId = localStorage.getItem("sessionId");
-                if (!sessionId) {
+                const userName = localStorage.getItem("userName");
+                if (!userName) {
                     setBestMatchName("No session found");
                     return;
                 }
 
-                const res = await fetch(`http://localhost:${5173}/quiz-results/${sessionId}`);
+                const res = await fetch(`http://localhost:${PORT}/quiz-results/${userName}`);
                 const data = await res.json();
 
                 if (data.bestMatchName) {
@@ -32,10 +33,10 @@ const CompatibilityResults = () => {
     return (
         <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50 p-5">
             {/* Back button */}
-            <div className = "p-6">
-                <button 
-                    onClick = {() => navigate('/')}
-                    className = "px-5 py-3 bg-orange-600 font-bold text-white rounded-lg hover:bg-orange-700"
+            <div className="p-6">
+                <button
+                    onClick={() => navigate('/')}
+                    className="px-5 py-3 bg-orange-600 font-bold text-white rounded-lg hover:bg-orange-700"
                 >
                     Back to Events!
                 </button>

@@ -29,6 +29,7 @@ export default function LoginPage() {
 
   const handleEmailLogin = async (e) => {
     e.preventDefault();
+
     console.log("Email login attempted with:", { email, password });
     try {
       const response = await axios.post(`http://localhost:${PORT}/user/login`, {
@@ -43,7 +44,11 @@ export default function LoginPage() {
       const dataString = JSON.stringify(data);
       localStorage.setItem("userData", dataString);
 
-      localStorage.setItem("sessionId", response.data);
+      localStorage.setItem("sessionId", response.data)
+
+      const userName = data.email.split('@')[0].toLowerCase(); // todo: edit
+      localStorage.setItem("userName", userName); // todo: edit
+
       navigate("/user-dashboard");
     } catch (err) {
       console.error(err);
@@ -70,6 +75,7 @@ export default function LoginPage() {
       };
       const dataString = JSON.stringify(data);
       localStorage.setItem("userData", dataString);
+      localStorage.setItem("userName", username.toLowerCase());
       navigate('/user-dashboard');
     } catch (err) {
       console.error(err);

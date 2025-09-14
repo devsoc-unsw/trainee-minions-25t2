@@ -246,8 +246,7 @@ async function getBestMatch(req: Request, res: Response) {
   try {
     const { name } = req.params;
 
-    const users = await usersCollection.find().toArray();
-    
+    const matrix = await quizCompatibilityCollection.find().toArray();
 
     res.json({
       personA: personA.name,
